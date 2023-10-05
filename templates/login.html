@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<div class="hero_area">
+	    <!-- header section strats -->
+		<header class="header_section">
+			<div class="container">
+			  <nav class="navbar navbar-expand-lg custom_nav-container pt-3">
+				<a class="navbar-brand mr-5" href="index.html">
+				  <img src="{% static '/images/mgnrega-kerala.png' %}" alt="">
+				  <span>
+					Panchayath
+				  </span>
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				  <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+					<ul class="navbar-nav  ">
+					  <li class="nav-item active">
+						<a class="nav-link" href="\">Home <span class="sr-only">(current)</span></a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="about.html"> About </a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="service.html"> Service </a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="contact.html">Contact us</a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="login.html">Login</a>
+					  </li>
+					</ul>
+					<form class="form-inline">
+					  <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
+					</form>
+				  </div>
+				</div>
+			  </nav>
+			</div>
+		  </header>
+		  <!-- end header section -->
+	</div>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static '/images/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/fonts/iconic/css/material-design-iconic-font.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static '/vendor/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/vendor/animsition/css/animsition.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static '/vendor/daterangepicker/daterangepicker.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				<form action="" class="login100-form validate-form" method="POST">
+					{% csrf_token %}
+					<span class="login100-form-title p-b-49">
+						Login
+					</span>
+
+					<div class="wrap-input100 validate-input">
+						<label for="username">username:</label>
+						<input class="input100" type="username" id="username" name="username" required>
+						<span id="username-error" class="text-danger"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<label for="password">Password:</label>
+						<input class="input100" type="password" id="password" name="password" required>
+						<span id="password-error" class="text-danger"></span>
+		            </div>
+					
+					<div class="text-right p-t-8 p-b-31">
+						<p><a href="{% url 'password_reset' %}" class="link" style="color: rgb(61, 88, 147);">Forgot Password</a></p>
+					</div>
+					
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button class="login100-form-btn" type="submit">
+								Login
+							</button>
+						</div>
+					</div>
+
+					<div class="txt1 text-center p-t-54 p-b-20">
+						<span>
+							Or Sign Up Using
+						</span>
+					</div>
+
+					<div class="flex-c-m">
+						<a href="#" class="login100-social-item bg1">
+							<i class="fa fa-facebook"></i>
+						</a>
+
+						<a href="#" class="login100-social-item bg2">
+							<i class="fa fa-twitter"></i>
+						</a>
+
+						<a href="https://myaccount.google.com/" class="login100-social-item bg3">
+							<i class="fa fa-google"></i>
+						</a>
+					</div>
+						<span class="txt1 p-b-17">
+							Or Sign Up Using
+						</span>
+
+						<a href="registration.html" class="txt2">
+							Sign Up
+						</a>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+	
+<!--===============================================================================================-->
+	<script src="{% static '/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static '/vendor/animsition/js/animsition.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static '/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static '/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static '/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static '/vendor/daterangepicker/moment.min.js' %}"></script>
+	<script src="{% static '/vendor/daterangepicker/daterangepicker.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static '/vendor/countdowntime/countdowntime.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static '/js/main.js' %}"></script>
+
+</body>
+</html>
