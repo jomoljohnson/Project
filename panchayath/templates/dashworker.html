@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Dashboard</title>
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: right;
+        }
+
+        .user-profile {
+            display: inline-block;
+            padding: 5px 20px;
+            text-align: center;
+        }
+
+        .user-profile i {
+            font-size: 30px;
+            margin-right: 10px;
+            color: #fff; /* Icon color */
+        }
+
+        .logout-button {
+            background-color: #e74c3c; /* Change the color to red (#e74c3c) */
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: #333;
+            color: #fff;
+            width: 250px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar table {
+            width: 100%;
+        }
+
+        .sidebar td {
+            padding: 10px 20px;
+            border-bottom: 1px solid #555;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        /* Content Area Styles */
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        /* User Dashboard Styles */
+        .dashboard-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Function Buttons */
+        .function-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                left: -250px;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="user-profile">
+            <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+            <span>Welcome, {{user.username}}</span>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+        {% else %}
+        <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
+        {% endif %}        <!--<button class="logout-button">Logout</button>-->
+    </div>
+
+    <!-- Sidebar Section -->
+    <div class="sidebar" id="sidebar">
+        <table>
+            <tr>
+                <td>Dashboard</td>
+            </tr>
+            <tr>
+                <td> Working days</td>
+            </tr>
+            <tr>
+                <td>View Attendance</td>
+            </tr>
+            <tr>
+                <td>Work Site Details</td>
+            </tr>
+            <tr>
+                <td>Notification</td>
+            </tr>
+            <tr>
+                <td>Salary</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h1 class="dashboard-title">Worker Dashboard</h1>
+        <button class="function-button"> Working days</button>
+        <button class="function-button">View Attendance</button>
+        <button class="function-button">Work Site Details</button>
+        <button class="function-button">Notification</button>
+        <button class="function-button">Salary</button>
+        <!--<button class="function-button">Customized Working place</button>-->
+    </div>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+        const sidebar = document.getElementById("sidebar");
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector(".user-profile").addEventListener("click", () => {
+                sidebar.classList.toggle("show");
+            });
+        });
+    </script>
+</body>
+</html>
