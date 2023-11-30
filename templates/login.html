@@ -33,7 +33,12 @@
 						<a class="nav-link" href="contact.html">Contact us</a>
 					  </li>
 					  <li class="nav-item">
-						<a class="nav-link" href="login.html">Login</a>
+						{% if user.is_authenticated %}
+    					<a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+    					{% else %}
+    					<a href="login" class="btn btn-primary ml-lg-3">Login</a>
+    					{% endif %}
+						<!--<a class="nav-link" href="login.html">Login</a>-->
 					  </li>
 					</ul>
 					<form class="form-inline">
@@ -77,6 +82,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				<div id="alert-message" class="alert alert-danger" style="display: none;"></div>
 				<form action="" class="login100-form validate-form" method="POST">
 					{% csrf_token %}
 					<span class="login100-form-title p-b-49">
@@ -85,7 +91,7 @@
 
 					<div class="wrap-input100 validate-input">
 						<label for="username">username:</label>
-						<input class="input100" type="username" id="username" name="username" required>
+						<input class="input100" type="email" id="email" name="email" required>
 						<span id="username-error" class="text-danger"></span>
 					</div>
 
@@ -112,9 +118,12 @@
 						<span>
 							Or Sign Up Using
 						</span>
+						<a href="registration.html" class="txt2">
+							Sign Up
+						</a>
 					</div>
 
-					<div class="flex-c-m">
+					<!--<div class="flex-c-m">
 						<a href="#" class="login100-social-item bg1">
 							<i class="fa fa-facebook"></i>
 						</a>
@@ -126,14 +135,12 @@
 						<a href="https://myaccount.google.com/" class="login100-social-item bg3">
 							<i class="fa fa-google"></i>
 						</a>
-					</div>
-						<span class="txt1 p-b-17">
+					</div>-->
+						<!--<span class="txt1 p-b-17">
 							Or Sign Up Using
-						</span>
+						</span>-->
 
-						<a href="registration.html" class="txt2">
-							Sign Up
-						</a>
+						
 				</form>
 			</div>
 		</div>
@@ -160,4 +167,12 @@
 	<script src="{% static '/js/main.js' %}"></script>
 
 </body>
+	<script>
+		// JavaScript code to display an alert when an error occurs
+		{% if error_message %}
+			var errorMessage = "{{ error_message }}";
+			document.getElementById("alert-message").textContent = errorMessage;
+			document.getElementById("alert-message").style.display = "block";
+		{% endif %}
+	</script>
 </html>

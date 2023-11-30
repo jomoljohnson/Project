@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Admin Dashboard</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+                    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+                    <style>
+                
+                        body {
+                            font-family: 'Montserrat', sans-serif;
+                            background-color: #f0f5f9; /* Use your preferred background color */
+                            margin: 0;
+                            padding: 0;
+                        }
+                
+                        /* Header styles */
+                        .header {
+                            background-color: #f0f5f9; /* Use your preferred header background color */
+                            padding: 10px 20px;
+                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            justify-content: space-between; /* Align items horizontally */
+                            align-items: center; /* Align items vertically */
+                            width: 100%; /* Header width spans the whole page */
+                            position: fixed; /* Fixed position for the header */
+                            z-index: 1; /* Ensure the header appears above the sidebar */
+                        }
+                
+                        /* Page title styles */
+                        .page-title {
+                            font-size: 24px;
+                            margin-bottom: 20px;
+                        }
+                
+                        /* Logout button styles */
+                        #logout-link {
+                            background-color: #80a4c2; /* Use your preferred button background color */
+                            color: #fff; /* Use your preferred button text color */
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: 5px;
+                            text-decoration: none;
+                            transition: background-color 0.3s;
+                        }
+                
+                        #logout-link:hover {
+                            background-color: #658da9; /* Use your preferred button hover background color */
+                        }
+                
+                        /* Sidebar styles */
+                        .sidebar {
+                            height: 100%;
+                            width: 250px;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            background-color: #333; /* Use your preferred background color */
+                            color: #fff; /* Use your preferred text color */
+                            padding-top: 20px;
+                            margin-top: 60px; /* Adjust margin to start after the header */
+                        }
+                
+                        .sidebar ul {
+                            list-style: none;
+                            padding: 0;
+                        }
+                
+                        .sidebar li {
+                            padding: 10px;
+                        }
+                
+                        .sidebar a {
+                            color: #fff; /* Use your preferred text color */
+                            text-decoration: none;
+                            display: block;
+                        }
+                
+                        .sidebar a:hover {
+                            background-color: #555; /* Use your preferred hover background color */
+                        }
+                
+                        /* Main content styles */
+                        .content {
+                            margin-left: 250px;
+                            padding: 20px;
+                        }
+                
+                        .container {
+                            margin-top: 100px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="user-profile">
+                            <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+                            <span>Welcome, Panchayathy</span>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+                        {% else %}
+                        <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
+                        {% endif %}        <!--<button class="logout-button">Logout</button>-->
+                    </div>
+                
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <ul>
+                            <li><a href="member">Member User</a></li>
+                            <li><a href="worker">Worker User</a></li>
+                            <li><a href="user">regular User</a></li>                     
+                            <li><a href="admin_view_job_cards">view job Card</a></li>
+                        </ul>
+                    </div>
+                    <!-- Main content -->
+                    <div class="content">
+                        <!-- Content area -->
+                        <div class="container">
+                            <!--<div class="row">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Total Workers</h5>
+                                            <p class="card-text">{{ worker_users.count }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div class="container">
+                                <div id="worker-list">
+                                    <!-- User table -->
+                                    <h2 class="page-title mt-4">Applied Job Card</h2>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Applicant Name</th>
+                                                <th>Phone Number</th>
+                                                <th>Email</th>
+                                                <th>House Name</th>
+                                                <th>House Number</th>
+                                                <th>Panchayath</th>
+                                                <th>City</th>
+                                                <th>District</th>
+                                                <th>Ration Card Number</th>
+                                                <th>category</th>
+                                                <th>Household Latrine</th>
+                                                <th>Indira Avas Yojana</th>
+                                                <th> RoFR Act</th> 
+                                                <th>Action</th>                                               <!-- Add more table headers as needed -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for job in job_cards %}
+                                                <tr>
+                                                    <td>{{ job.applicant_name }}</td>
+                                                    <td>{{ job.phone_number }}</td>
+                                                    <td>{{ job.email }}</td>
+                                                    <td>{{ job.house_name }}</td>
+                                                    <td>{{ job.house_number }}</td>
+                                                    <td>{{ job.panchayath }}</td>
+                                                    <td>{{ job.city }}</td>
+                                                    <td>{{ job.district }}</td>
+                                                    <td>{{ job.ration_card_number }}</td>
+                                                    <td>{{ job.category }}</td>
+                                                    <td>{{ job.household_latrine }}</td>
+                                                    <td>{{ job.indira_avas_yojana }}</td>
+                                                    <td>{{ job.rofr_act }}</td>
+                                                    <td>
+                                                        {% if job.approval_status in 'Pending' or job.approval_status in 'Approved' or job.approval_status in 'Rejected' %}
+                                                            <form action="{% url 'admin_approve_reject' job.id 'approve' %}" method="post" class="approval-form">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="approval-button">Approve</button>
+                                                            </form>
+                                                    
+                                                            <form action="{% url 'admin_approve_reject' job.id 'reject' %}" method="post" class="approval-form">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="approval-button">Reject</button>
+                                                            </form>
+                                                        {% endif %}
+                                                    </td>                                                                                                                                                            
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <!--<div class="pagination">
+                                        <span class="step-links">
+                                            {% if worker_users.has_previous %}
+                                                <a href="?page=1">&laquo; first</a>
+                                                <a href="?page={{ worker_users.previous_page }}">previous</a>
+                                            {% endif %}
+                                            <span class="current-page">
+                                                Page {{ worker_users.number }} of {{ worker_users.paginator.num_pages }}.
+                                            </span>
+                                            {% if worker_users.has_next %}
+                                                <a href="?page={{ worker_users.next_page }}">next</a>
+                                                <a href="?page={{ worker_users.paginator.num_pages }}">last &raquo;</a>
+                                            {% endif %}
+                                        </span>
+                                    </div>-->
+                                </div>
+                            </div>
+                    <!-- Include jQuery -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                    <script>
+                    </script>
+                    
+
+                    
+    
+
+                    <!-- Include Bootstrap JS -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                </body>
+                </html>
+                
