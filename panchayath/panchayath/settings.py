@@ -143,4 +143,16 @@ EMAIL_HOST_PASSWORD = 'Jomoljohnson@123'
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_NAME = "sessionid"
 SESSION_COOKIE_AGE = 600
+<<<<<<< HEAD:panchayath/settings.py
 LOGIN_URL='login'
+
+
+
+
+AUTHENTICATION_BACKENDS = (
+    'home.auth_backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+=======
+LOGIN_URL='login'
+>>>>>>> 3cdffe2b62405c0c49b4db2b1e7756adc2b63df5:panchayath/panchayath/settings.py

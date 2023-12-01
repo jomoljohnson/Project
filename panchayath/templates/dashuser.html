@@ -4,174 +4,288 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Basic Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+                            font-family: 'Montserrat', sans-serif;
+                            background-color: #f0f5f9; /* Use your preferred background color */
+                            margin: 0;
+                            padding: 0;
+                        }
+                
+                        /* Header styles */
+                        .header {
+                            background-color: #f0f5f9; /* Use your preferred header background color */
+                            padding: 10px 20px;
+                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            justify-content: space-between; /* Align items horizontally */
+                            align-items: center; /* Align items vertically */
+                            width: 100%; /* Header width spans the whole page */
+                            position: fixed; /* Fixed position for the header */
+                            z-index: 1; /* Ensure the header appears above the sidebar */
+                        }
+                
+                        /* Page title styles */
+                        .page-title {
+                            font-size: 24px;
+                            margin-bottom: 20px;
+                        }
+                
+                        /* Logout button styles */
+                        #logout-link {
+                            background-color: #80a4c2; /* Use your preferred button background color */
+                            color: #fff; /* Use your preferred button text color */
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: 5px;
+                            text-decoration: none;
+                            transition: background-color 0.3s;
+                        }
+                
+                        #logout-link:hover {
+                            background-color: #658da9; /* Use your preferred button hover background color */
+                        }
+                
+                        /* Sidebar styles */
+                        .sidebar {
+                            height: 100%;
+                            width: 250px;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            background-color: #333; /* Use your preferred background color */
+                            color: #fff; /* Use your preferred text color */
+                            padding-top: 20px;
+                            margin-top: 60px; /* Adjust margin to start after the header */
+                        }
+                
+                        .sidebar ul {
+                            list-style: none;
+                            padding: 0;
+                        }
+                
+                        .sidebar li {
+                            padding: 10px;
+                        }
+                
+                        .sidebar a {
+                            color: #fff; /* Use your preferred text color */
+                            text-decoration: none;
+                            display: block;
+                        }
+                
+                        .sidebar a:hover {
+                            background-color: #555; /* Use your preferred hover background color */
+                        }
+                
+                        /* Main content styles */
+                        .content {
+                            margin-left: 250px;
+                            padding: 20px;
+                        }
+                
+                        .container {
+                            margin-top: 100px;
+                        }
 
-        /* Header Styles */
-        .header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: right;
-        }
+        /* New styles for user-specific features */
+        /* Apply for Thozil Card styles */
+        /* Apply for Thozil Card styles */
+.apply-card-button {
+    background-color: #ff0066;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
 
-        .user-profile {
-            display: inline-block;
-            padding: 5px 20px;
-            text-align: center;
-        }
+.apply-card-button:hover {
+    background-color: #ff3399; /* Change the hover background color */
+}
 
-        .user-profile i {
-            font-size: 30px;
-            margin-right: 10px;
-            color: #fff; /* Icon color */
-        }
+/* Working days selection styles */
+.working-days-button {
+    background-color: #ff0066;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
 
-        .logout-button {
-            background-color: #e74c3c; /* Change the color to red (#e74c3c) */
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-            margin-right: 20px;
-            border-radius: 5px;
-        }
+.working-days-button:hover {
+    background-color: #ff3399; /* Change the hover background color */
+}
 
-        /* Sidebar Styles */
-        .sidebar {
-            background-color: #333;
-            color: #fff;
-            width: 250px;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: -250px;
-            transition: left 0.3s ease-in-out;
-        }
+/* Notification styles */
+.notifications-button {
+    background-color: #ff0066;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
 
-        .sidebar.show {
-            left: 0;
-        }
+.notifications-button:hover {
+    background-color: #ff3399; /* Change the hover background color */
+}
 
-        .sidebar table {
-            width: 100%;
-        }
+/* Complaints styles */
+.complaints-button {
+    background-color: #ff0066;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
 
-        .sidebar td {
-            padding: 10px 20px;
-            border-bottom: 1px solid #555;
-            text-align: left;
-            font-size: 18px;
-        }
+.complaints-button:hover {
+    background-color: #ff3399; /* Change the hover background color */
+}
 
-        /* Content Area Styles */
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
+/* Application for Work styles */
+.apply-work-button {
+    background-color: #ff0066;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
 
-        /* User Dashboard Styles */
-        .dashboard-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+.apply-work-button:hover {
+    background-color: #ff3399; /* Change the hover background color */
+}
 
-        /* Function Buttons */
-        .function-button {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin-right: 10px;
-            display: block;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+/* Customized Working Place styles */
+.customized-place-button {
+    background-color: #F5F5F5;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
 
-        /* Responsive Styles */
-        @media screen and (max-width: 768px) {
-            .sidebar {
-                left: -250px;
-            }
+.customized-place-button:hover {
+    background-color: #cccccc; /* Change the hover background color */
+}
+/* Sidebar styles */
+                        .sidebar {
+                            height: 100%;
+                            width: 250px;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            background-color: #333; /* Use your preferred background color */
+                            color: #fff; /* Use your preferred text color */
+                            padding-top: 20px;
+                            margin-top: 60px; /* Adjust margin to start after the header */
+                        }
+                
+                        .sidebar ul {
+                            list-style: none;
+                            padding: 0;
+                        }
+                
+                        .sidebar li {
+                            padding: 10px;
+                        }
+                
+                        .sidebar a {
+                            color: #fff; /* Use your preferred text color */
+                            text-decoration: none;
+                            display: block;
+                        }
+                
+                        .sidebar a:hover {
+                            background-color: #555; /* Use your preferred hover background color */
+                        }
 
-            .sidebar.show {
-                left: 0;
-            }
 
-            .content {
-                margin-left: 0;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Header Section -->
+    <!-- Header -->
     <div class="header">
-        <div class="user-profile">
-            <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
-            <span>Welcome, {{user.username}}</span>
-        </div>
-        {% if user.is_authenticated %}
-        <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
-        {% else %}
-        <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
-        {% endif %}        <!--<button class="logout-button">Logout</button>-->
-    </div>
+      <div class="user-profile">
+          <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+          <span>Welcome, {{user.username}}</span>
+          <a href="edit_profile">Profile</a>
+      </div>
+      {% if user.is_authenticated %}
+      <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+      {% else %}
+      <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
+      {% endif %}        <!--<button class="logout-button">Logout</button>-->
+  </div>
 
-    <!-- Sidebar Section -->
-    <div class="sidebar" id="sidebar">
-        <table>
-            <tr>
-                <td>Dashboard</td>
-            </tr>
-            <tr>
-                <td>Apply For Thozil Card</td>
-            </tr>
-            <tr>
-                <td>Working days selection</td>
-            </tr>
-            <tr>
-                <td>Notification</td>
-            </tr>
-            <tr>
-                <td>Application For Work</td>
-            </tr>
-            <tr>
-                <td>Complaints</td>
-            </tr>
-            <tr>
-                <td>Customized Working place</td>
-            </tr>
-        </table>
-    </div>
+    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <ul>
+                            <li><a href="job_card_application">Apply for Job Card</a></li>
+                            <li><a href="view_user_jobcard">View Job Card</a></li>
+                            <li><a href="#">Working Days Selection</a></li>
+                            <li><a href="#">Notifications</a></li>
+                            <li><a href="#">Application for Work</a></li>
+                            <!-- <li><a href="">Blocked users</a></li> -->
+                        </ul>
+                    </div>
 
-    <!-- Content Section -->
+    <!-- Main content -->
     <div class="content">
-        <h1 class="dashboard-title">User Dashboard</h1>
-        <button class="function-button">Apply For Thozil Card</button>
-        <button class="function-button">Working days selection</button>
-        <button class="function-button">Notification</button>
-        <button class="function-button">Application For Work</button>
-        <button class="function-button">Complaints</button>
-        <button class="function-button">Customized Working place</button>
+        <!-- Content area for each feature -->
+        <!-- Apply for Thozil Card -->
+        <div class="apply-card">
+            <h2 class="page-title">Apply for Thozil Card</h2>
+            <!-- Add your form elements and content for applying for a Thozil Card here -->
+        </div>
+
+        <!-- Working Days Selection -->
+        <div class="working-days">
+            <h2 class="page-title">Working Days Selection</h2>
+            <!-- Add your form or selection options for choosing working days here -->
+        </div>
+
+        <!-- Notifications -->
+        <div class="notifications">
+            <h2 class="page-title">Notifications</h2>
+            <!-- Display user notifications and relevant information here -->
+        </div>
+
+        <!-- Complaints -->
+        <div class="complaints">
+            <h2 class="page-title">Complaints</h2>
+            <!-- Provide a form or interface for users to submit complaints -->
+        </div>
+
+        <!-- Application for Work -->
+        <div class="apply-work">
+            <h2 class="page-title">Application for Work</h2>
+            <!-- Add a form or details for applying for specific work opportunities -->
+        </div>
+
+        <!-- Customized Working Place -->
+        <div class="customized-place">
+            <h2 class="page-title">Customized Working Place</h2>
+            <!-- Display or customize information related to the user's working place -->
+        </div>
     </div>
 
-    <!-- JavaScript for Sidebar Toggle -->
-    <script>
-        const sidebar = document.getElementById("sidebar");
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelector(".user-profile").addEventListener("click", () => {
-                sidebar.classList.toggle("show");
-            });
-        });
-    </script>
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
