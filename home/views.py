@@ -102,7 +102,7 @@ def login(request):
         loginusername = request.POST.get('email')
         password = request.POST.get('password')
 
-        if loginusername == "panchayath@gmail.com" and password == "panchayath123":
+        if loginusername == "panchayath01@gmail.com" and password == "Panchayath@123":
              #For the superuser, redirect to admin_index.html with user list and count
             return render(request, 'admindashboard.html')
 
@@ -373,11 +373,12 @@ def view_user_jobcard(request):
     if not request.user.is_authenticated:
         # Handle unauthenticated user (redirect to login page, show an error message, etc.)
         return redirect('login')  
-    user_profile = CustomUser.objects.get(username=request.user.username)
-    job_cards = JobCard.objects.filter(user=user_profile)
+    user = request.user 
+    #user_profile = CustomUser.objects.get(username=request.user.username)
+    job_cards = JobCard.objects.filter(user=user)
 
     return render(request, 'view_user_jobcard.html', {
-        'user_profile': user_profile,
+        'user': user,
         'job_cards': job_cards,
     })
 
@@ -534,3 +535,183 @@ def take_job(request):
     # For example, display available jobs or a form to request a job
 
     return render(request, 'take_job.html')
+
+
+
+
+
+
+
+# views.py
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Job, Notification, UserProfile, UserSelectedJob, MemberApproval
+from datetime import datetime, timedelta
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import Job, UserSelectedJob
+from datetime import datetime, timedelta
+
+@login_required
+def select_user_job(request):
+    if request.method == 'POST':
+        job_id = request.POST.get('job_id')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+
+        try:
+            job = Job.objects.get(id=job_id)
+            user = request.user
+
+            # Perform validation or additional checks if needed
+
+            # Create UserJobSelection object and save to the database
+            user_job_selection = UserSelectedJob(user=user, job=job, start_date=start_date, end_date=end_date)
+            user_job_selection.save()
+
+            messages.success(request, 'Job selection saved successfully.')
+        except Job.DoesNotExist:
+            messages.error(request, 'Invalid job selection.')
+
+    # Retrieve all selected jobs for the current user
+    selected_jobs = UserSelectedJob.objects.filter(user=request.user)
+
+    # Calculate remaining working days for all selected jobs for an entire year
+    total_working_days_per_year = 100  # Total working days for each job in a year
+    remaining_working_days = total_working_days_per_year
+
+    for selected_job in selected_jobs:
+        start_date = selected_job.start_date
+        end_date = selected_job.end_date
+
+        # Ensure the selected dates are within the same year
+        if start_date.year == end_date.year == datetime.now().year:
+            # Calculate the difference in days between start and end dates
+            days_difference = (end_date - start_date).days + 1
+
+            # Subtract the days for the current job from remaining_working_days
+            remaining_working_days -= days_difference
+
+    jobs = Job.objects.all()
+    return render(request, 'select_user_job.html', {'jobs': jobs, 'selected_jobs': selected_jobs, 'remaining_working_days': remaining_working_days})
+
+
+
+
+def member_approve_reject(request, user_selected_job_id, status):
+    user_selected_job = UserSelectedJob.objects.get(id=user_selected_job_id)
+    member = request.user
+
+    if status == 'approve':
+        user_selected_job.status = 'Approved'
+        user_selected_job.save()
+
+        # Send notification to worker
+        Notification.objects.create(user=user_selected_job.user, job=user_selected_job.job, date=user_selected_job.start_date, is_confirmed=True)
+
+        messages.success(request, f"The job request for '{user_selected_job.job.title}' has been approved.")
+    elif status == 'reject':
+        rejection_reason = request.POST.get('rejection_reason')
+        user_selected_job.status = 'Rejected'
+        user_selected_job.rejection_reason = rejection_reason
+        user_selected_job.save()
+
+        # Notify the user about the rejection
+        messages.success(request, f"The job request for '{user_selected_job.job.title}' has been rejected with reason: {rejection_reason}")
+
+    # Create a record for member approval
+    MemberApproval.objects.create(member=member, user_selected_job=user_selected_job, status=status)
+
+    return redirect('dashboard')
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Job
+
+@login_required
+def add_job(request):
+    if request.method == 'POST':
+        job_title = request.POST.get('job_title')
+        Job.objects.create(title=job_title)
+        # You can add additional logic or redirect to another page
+        return redirect('add_job')
+    return render(request, 'add_job.html')
+
+def edit_job(request, job_id):
+    job = Job.objects.get(id=job_id)
+
+    if request.method == 'POST':
+        new_job_title = request.POST.get('new_job_title')
+
+        # Validate if new_job_title is not empty
+        if not new_job_title:
+            messages.error(request, 'New job title cannot be empty.')
+            return redirect('add_job')
+
+        # Validate if the new job title already exists
+        if Job.objects.exclude(id=job_id).filter(title=new_job_title).exists():
+            messages.error(request, 'Job with the same title already exists.')
+            return redirect('add_job')
+
+        # If validation passes, update the job title
+        job.title = new_job_title
+        job.save()
+        messages.success(request, f'Job "{new_job_title}" updated successfully.')
+
+    return redirect('add_job')
+
+def delete_job(request, job_id):
+    job = Job.objects.get(id=job_id)
+    job_title = job.title
+    job.delete()
+    messages.success(request, f'Job "{job_title}" deleted successfully.')
+
+    return redirect('add_job')
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import UserSelectedJob
+
+@login_required
+def view_select_user_job(request):
+    if not request.user.is_authenticated:
+        # Handle unauthenticated user (redirect to login page, show an error message, etc.)
+        return redirect('login')  
+    user = request.user 
+    #user_profile = CustomUser.objects.get(username=request.user.username)
+    selected_works = UserSelectedJob.objects.filter(user=user)
+
+    context = {
+        'user': request.user,
+        'selected_works': selected_works,
+    }
+
+
+    return render(request, 'edit_select_user_job.html', context)
+
+
+
+@login_required
+def edit_select_user_job(request, user_select_job_id):
+    user_select_job = get_object_or_404(UserSelectedJob, id=user_select_job_id)
+
+    # Assuming 'jobs' is a queryset of available jobs
+    jobs = Job.objects.all()
+
+    context = {
+        'user_select_job': user_select_job,
+        'jobs': jobs,
+        # Add other context data as needed
+    }
+
+    return render(request, 'edit_select_user_job.html', context)
+
+

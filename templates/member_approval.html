@@ -1,0 +1,34 @@
+<!-- member_approval.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Approval</title>
+    <!-- Add your CSS and other includes here -->
+</head>
+<body>
+    <h2>Member Approval</h2>
+    <ul>
+        {% for approval in member_approvals %}
+            <li>
+                <strong>{{ approval.user_selected_job.user.username }}</strong> has requested to work on
+                <strong>{{ approval.user_selected_job.job.title }}</strong> from
+                <strong>{{ approval.user_selected_job.start_date }}</strong> to
+                <strong>{{ approval.user_selected_job.end_date }}</strong>.
+                <form method="post" action="{% url 'member_approve_reject' approval.user_selected_job.id 'approve' %}">
+                    {% csrf_token %}
+                    <button type="submit">Approve</button>
+                </form>
+                <form method="post" action="{% url 'member_approve_reject' approval.user_selected_job.id 'reject' %}">
+                    {% csrf_token %}
+                    <label for="rejection_reason">Rejection Reason:</label>
+                    <input type="text" name="rejection_reason" id="rejection_reason" required>
+                    <button type="submit">Reject</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
