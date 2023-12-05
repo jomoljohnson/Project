@@ -1,5 +1,3 @@
-<!-- admin_dashboard.html -->
-
 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -97,82 +95,115 @@
                 <body>
                     <!-- Header -->
                     <div class="header">
-                        <div class="user-profile">
-                            <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
-                            <span>Welcome, Panchayathy</span>
-                        </div>
-                        {% if user.is_authenticated %}
-                        <a href={% url 'logout' %} class="btn btn-primary ml-lg-3">Logout</a>
-                        {% else %}
-                        <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
-                        {% endif %}        <!--<button class="logout-button">Logout</button>-->
+                        <h1 class="page-title">Admin Dashboard</h1>
+                        <a href="{% url 'logout' %}" class="btn btn-primary" id="logout-link">Logout</a>
                     </div>
                 
                     <!-- Sidebar -->
                     <div class="sidebar">
                         <ul>
-                            <!--<li><a href="panchayath_details">Panchayath Details </a></li>
-                            <li><a href="add_member">Add The Members Details </a></li>-->
+                            <li><a href="panchayath_details">Panchayath Details </a></li>
+                            <li><a href="add_member">Add The Members Details </a></li>
                             <li><a href="member">Member User</a></li>
                             <li><a href="worker">Worker User</a></li>
                             <li><a href="user">regular User</a></li>                     
                             <li><a href="admin_view_job_cards">view User job Card</a></li>
                             <li><a href="add_jobs">Add job</a></li>
                             <li><a href="view_add_job">View jobs</a></li>
+
                         </ul>
                     </div>
                     <!-- Main content -->
                     <div class="content">
                         <!-- Content area -->
                         <div class="container">
-                            <!--<div class="row">
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Total Workers</h5>
-                                            <p class="card-text">{{ worker_users.count }}</p>
-                                        </div>
-                                    </div>
+                            <!-- Panchayath Name Input -->
+                            <!-- Panchayath Name Input -->
+                            <form method="post" action="{% url 'add_member' %}" id="addPanchayathForm">
+                                {% csrf_token %}
+                                            
+                            <!-- Form for Adding Members -->
+                            <form id="addMemberForm">
+                                <h2 class="page-title mt-4">Add Member</h2>
+                
+                                <!-- Ward Number Input -->
+                                <div class="form-group">
+                                    <label for="ward_number">Ward Number:</label>
+                                    <input type="text" name="ward_number" id="ward_number" class="form-control" required>
                                 </div>
-                            </div>-->
-                            <div class="container">
-                                <div class="container">
-                                    <!-- Add Job Form -->
-                                    <form method="post" action="{% url 'edit_job' job.id %}">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <label for="job_title">Job Title:</label>
-                                            <input type="text" name="job_title" class="form-control" value="{{ job.title }}" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">update Job</button>
-                                    </form>
-                            
-                                    <!-- Rest of the Admin Dashboard content -->
+                
+                                <!-- Member Name Input -->
+                                <div class="form-group">
+                                    <label for="member_name">Member Name:</label>
+                                    <input type="text" name="member_name" id="member_name" class="form-control" required>
                                 </div>
-                            
-                                    <!--<div class="pagination">
-                                        <span class="step-links">
-                                            {% if worker_users.has_previous %}
-                                                <a href="?page=1">&laquo; first</a>
-                                                <a href="?page={{ worker_users.previous_page }}">previous</a>
-                                            {% endif %}
-                                            <span class="current-page">
-                                                Page {{ worker_users.number }} of {{ worker_users.paginator.num_pages }}.
-                                            </span>
-                                            {% if worker_users.has_next %}
-                                                <a href="?page={{ worker_users.next_page }}">next</a>
-                                                <a href="?page={{ worker_users.paginator.num_pages }}">last &raquo;</a>
-                                            {% endif %}
-                                        </span>
-                                    </div>-->
+                
+                                <!-- Member Email Input -->
+                                <div class="form-group">
+                                    <label for="member_email">Member Email:</label>
+                                    <input type="email" name="member_email" id="member_email" class="form-control" required>
                                 </div>
+                
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary">Add Member</button>
+                            </form>
+                
+                            <!-- Display Member List -->
+                            <div id="member-list">
+                                <!-- Member list will be displayed here -->
                             </div>
+                        </div>
+                    </div>
+                
                     <!-- Include jQuery -->
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+                
+                    <!-- JavaScript for Handling Form Submission and Member List Display -->
                     <script>
+                        $(document).ready(function () {
+                            // Flag to check if Panchayath Name is entered
+                            var panchayathNameEntered = false;
+                
+                            // Function to handle Panchayath Name addition
+                            $("#addPanchayath").click(function () {
+                                var enteredPanchayathName = $("#panchayath_name").val();
+                
+                                if (enteredPanchayathName && !panchayathNameEntered) {
+                                    // Panchayath Name is correct
+                                    alert("Panchayath Name is correct!");
+                                    panchayathNameEntered = true;
+                                    $("#panchayath_name").prop('disabled', true); // Disable the input
+                                } else if (panchayathNameEntered) {
+                                    // Panchayath Name already entered
+                                    alert("Panchayath Name has already been entered.");
+                                } else {
+                                    // Panchayath Name not entered
+                                    alert("Please enter a valid Panchayath Name.");
+                                }
+                            });
+                        $(document).ready(function () {
+                            // Function to handle form submission
+                            $("#addMemberForm").submit(function (event) {
+                                event.preventDefault();
+                
+                                // Get form data
+                                var formData = {
+                                    panchayath_name: $("#panchayath_name").val(),
+                                    ward_number: $("#ward_number").val(),
+                                    member_name: $("#member_name").val(),
+                                    member_email: $("#member_email").val()
+                                };
+                
+                                // TODO: Add AJAX request to submit form data to the server
+                
+                                // Display a success message (you can replace this with your logic)
+                                alert("Member added successfully!");
+                
+                                // TODO: Refresh or update the member list as needed
+                            });
+                        });
                     </script>
-                    
+                                    
 
                     
     
@@ -183,4 +214,5 @@
                     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
                 </body>
                 </html>
+                
                 

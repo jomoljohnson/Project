@@ -7,6 +7,9 @@ class CustomUser(AbstractUser):
     email=models.EmailField(unique=True)
     is_mentor = models.BooleanField(default=False)
     admin_id = models.CharField(max_length=10, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+    panchayath_name = models.CharField(max_length=100, blank=True, null=True,default='')
+    ward_number = models.CharField(max_length=10, blank=True, null=True,default='')
     def __str__(self):
         return self.username
     
@@ -82,9 +85,26 @@ class UserSelectedJob(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+    status = models.CharField(max_length=10, default='Pending') 
 
 class MemberApproval(models.Model):
     member = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     user_selected_job = models.ForeignKey(UserSelectedJob, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, default='Pending')  # 'Pending', 'Approved', 'Rejected'
     rejection_reason = models.TextField(blank=True, null=True)
+
+
+
+class Panchayath(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Member(models.Model):
+    ward_number = models.CharField(max_length=255)
+    member_name = models.CharField(max_length=255)
+    member_email = models.EmailField()
+
+    def __str__(self):
+        return self.member_name

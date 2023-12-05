@@ -116,6 +116,7 @@
                             <li><a href="add_jobs">Add job</a></li>
                             <li><a href="view_add_job">View jobs</a></li>
                             <li><a href="admin_view_user_job">User Jobs</a></li>
+
                         </ul>
                     </div>
                     <!-- Main content -->
@@ -132,77 +133,37 @@
                                     </div>
                                 </div>
                             </div>-->
-                            <div class="container">
-                                <div id="worker-list">
-                                    <!-- User table -->
-                                    <h2 class="page-title mt-4">Applied Job Card</h2>
-                                    <table class="table table-striped">
-                                        <thead>
+                                <h2>Admin View User Jobs</h2>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Job Title</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user_job in user_jobs %}
                                             <tr>
-                                                <th>Applicant Name</th>
-                                                <th>Phone Number</th>
-                                                <th>Email</th>
-                                                <th>House Name</th>
-                                                <th>House Number</th>
-                                                <th>Panchayath</th>
-                                                <th>City</th>
-                                                <th>District</th>
-                                                <th>Ration Card Number</th>
-                                                <th>category</th>
-                                                <th>Household Latrine</th>
-                                                <th>Indira Avas Yojana</th>
-                                                <th> RoFR Act</th> 
-                                                <th>Action</th>                                               <!-- Add more table headers as needed -->
+                                                <td>{{ user_job.user.username }}</td>
+                                                <td>{{ user_job.job.title }}</td>
+                                                <td>{{ user_job.start_date }}</td>
+                                                <td>{{ user_job.end_date }}</td>
+                                                <td>{{ user_job.status }}</td>
+                                                <td>
+                                                    <form method="post" action="{% url 'admin_toggle_approval' user_job.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                                    </form>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for job in job_cards %}
-                                                <tr>
-                                                    <td>{{ job.applicant_name }}</td>
-                                                    <td>{{ job.phone_number }}</td>
-                                                    <td>{{ job.email }}</td>
-                                                    <td>{{ job.house_name }}</td>
-                                                    <td>{{ job.house_number }}</td>
-                                                    <td>{{ job.panchayath }}</td>
-                                                    <td>{{ job.city }}</td>
-                                                    <td>{{ job.district }}</td>
-                                                    <td>{{ job.ration_card_number }}</td>
-                                                    <td>{{ job.category }}</td>
-                                                    <td>{{ job.household_latrine }}</td>
-                                                    <td>{{ job.indira_avas_yojana }}</td>
-                                                    <td>{{ job.rofr_act }}</td>
-                                                    <td>
-                                                        {% if job.approval_status in 'Pending' or job.approval_status in 'Approved' or job.approval_status in 'Rejected' %}
-                                                            <form action="{% url 'admin_approve_reject' job.id 'approve' %}" method="post" class="approval-form">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="approval-button">Approve</button>
-                                                            </form>
-                                                    
-                                                            <form action="{% url 'admin_approve_reject' job.id 'reject' %}" method="post" class="approval-form">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="approval-button">Reject</button>
-                                                            </form>
-                                                        {% endif %}
-                                                    </td>                                                                                                                                                            
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                    <!--<div class="pagination">
-                                        <span class="step-links">
-                                            {% if worker_users.has_previous %}
-                                                <a href="?page=1">&laquo; first</a>
-                                                <a href="?page={{ worker_users.previous_page }}">previous</a>
-                                            {% endif %}
-                                            <span class="current-page">
-                                                Page {{ worker_users.number }} of {{ worker_users.paginator.num_pages }}.
-                                            </span>
-                                            {% if worker_users.has_next %}
-                                                <a href="?page={{ worker_users.next_page }}">next</a>
-                                                <a href="?page={{ worker_users.paginator.num_pages }}">last &raquo;</a>
-                                            {% endif %}
-                                        </span>
-                                    </div>-->
-                                </div>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                     <!-- Include jQuery -->
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

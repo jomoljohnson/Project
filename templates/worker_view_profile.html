@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Update</title>
+    <title>Profile Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -211,7 +212,7 @@
                 
                         .sidebar a:hover {
                             background-color: #555; /* Use your preferred hover background color */
-         }
+                        }
          .container {
             max-width: 600px;
             margin: 0 auto;
@@ -244,6 +245,43 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        .main {
+            margin-top: 2%;
+            margin-left: 29%;
+            font-size: 28px;
+            padding: 0 10px;
+            width: 58%;
+        }
+        
+        .main h2 {
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .main .card {
+            background-color: #fff;
+            border-radius: 18px;
+            box-shadow: 1px 1px 8px 0 grey;
+            height: auto;
+            margin-bottom: 20px;
+            padding: 20px 0 20px 50px;
+        }
+        
+        .main .card table {
+            border: none;
+            font-size: 16px;
+            height: 270px;
+            width: 80%;
+        }
+        
+        .edit {
+            position: absolute;
+            color: #e7e7e8;
+            right: 14%;
+        }
+        
 
 
     </style>
@@ -251,66 +289,74 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="user-profile">
-            <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
-            <span>Welcome, {{user.username}}</span>
-        </div>
-        {% if user.is_authenticated %}
-        <a href={% url 'logout' %} class="btn btn-primary ml-lg-3">Logout</a>
-        {% else %}
-        <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
-        {% endif %}        <!--<button class="logout-button">Logout</button>-->
-    </div>
+      <div class="user-profile">
+          <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+          <span>Welcome, {{user.username}}</span>
+      </div>
+      {% if user.is_authenticated %}
+      <a href={% url 'logout' %} class="btn btn-primary ml-lg-3">Logout</a>
+      {% else %}
+      <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
+      {% endif %}        <!--<button class="logout-button">Logout</button>-->
+  </div>
 
     <!-- Sidebar -->
                     <div class="sidebar">
                         <ul>
-                            <li><a href="job_card_application">Apply for Job Card</a></li>
-                            <li><a href="view_user_jobcard">View Job Card</a></li>
-                            <li><a href="select_user_job">Working Days Selection</a></li>
-                            <li><a href="view_select_user_job">View Working Days</a></li>
-                            <li><a href="#">Notifications</a></li>
-                            <li><a href="edit_profile">Profile</a></li>
-                            <!-- <li><a href="">Blocked users</a></li> -->
+                            <li><a href="worker_profile">Profile</a></li>
+                            <li><a href="#">Working days</a></li>
+                            <li><a href="#">View Attendance</a></li>
+                            <li><a href="#">Work Site Details</a></li>
+                            <li><a href="#">Notification</a></li>
+                            <li><a href="#">Salary</a></li>
                         </ul>
+                        
                     </div>
 
     <!-- Main content -->
     <div class="container">
-        <h1>Edit Profile</h1>
-        <form class="profile-form" method="post" action="{% url 'edit_profile' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username" value="{{ user.username }}" required>
+        <!-- Content area for each feature -->
+        <!-- Apply for Thozil Card -->
+        <div class="apply-card">
+            <h2 class="page-title">PROFILE</h2>
+            <div class="card-body">
+                <i class="fa fa-pen fa-xs edit"></i>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>:</td>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>:</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Fisrt Name</td>
+                            <td>:</td>
+                            <td>{{ user.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Last Name</td>
+                            <td>:</td>
+                            <td>{{ user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Panchayath Name</td>
+                            <td>:</td>
+                            <td>{{ user.panchayath_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ward Number</td>
+                            <td>:</td>
+                            <td>{{ user.ward_number }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" name="email" id="email" value="{{ user.email }}" required>
-            </div>
-			
-			
-			<div class="form-group">
-                <label for="first_name">First Name:</label>
-                <input type="first_name" name="first_name" id="first_name" value="{{ user.first_name }}" required>
-            </div>
-			<div class="form-group">
-                <label for="last_name">Last Name:</label>
-                <input type="last_name" name="last_name" id="last_name" value="{{ user.last_name }}" required>
-            </div>
-            <div class="form-group">
-                <label for="panchayath_name">Panchayath Name:</label>
-                <input type="text" name="panchayath_name" id="panchayath_name" value="{{ user.panchayath_name }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="ward_number">Ward Number:</label>
-                <input type="text" name="ward_number" id="ward_number" value="{{ user.ward_number }}" required>
-            </div>
-			
-	   <!-- Add more fields here if needed -->
-            <button type="submit">Save Changes</button>
-        </form>
+        </div>
     </div>
 
     <!-- Include jQuery and Bootstrap JS -->

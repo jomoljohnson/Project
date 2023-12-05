@@ -287,5 +287,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Assuming user profile data is available in the "userProfile" variable
+            var userProfile = {
+                username: "{{ user.username }}",  // replace with actual data
+                email: "{{ user.email }}",  // replace with actual data
+                // Add more profile fields as needed
+            };
+
+            // Check if specific profile fields are empty
+            if (!userProfile.username || !userProfile.email) {
+                // Display an alert
+                alert("Update your profile to proceed. Please fill in all required fields.");
+            }
+        });
+    </script>
 </body>
 </html>

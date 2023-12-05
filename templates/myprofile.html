@@ -305,9 +305,9 @@
                         <ul>
                             <li><a href="job_card_application">Apply for Job Card</a></li>
                             <li><a href="view_user_jobcard">View Job Card</a></li>
-                            <li><a href="#">Working Days Selection</a></li>
+                            <li><a href="select_user_job">Working Days Selection</a></li>
+                            <li><a href="view_select_user_job">View Working Days</a></li>
                             <li><a href="#">Notifications</a></li>
-                            <li><a href="#">Application for Work</a></li>
                             <li><a href="edit_profile">Profile</a></li>
                             <li><a href="{% url 'edit_profile' %}">Edit Profile</a></li>
                             <!-- <li><a href="">Blocked users</a></li> -->
@@ -345,16 +345,16 @@
                             <td>:</td>
                             <td>{{ user.last_name }}</td>
                         </tr>
-                        <!--<tr>
-                            <td>Post</td>
+                        <tr>
+                            <td>Panchayath Name</td>
                             <td>:</td>
-                            <td>{{ user.posts }}</td>
+                            <td>{{ user.panchayath_name }}</td>
                         </tr>
-                        <!--<tr>
-                            <td>Terminal</td>
+                        <tr>
+                            <td>Ward Number</td>
                             <td>:</td>
-                            <td>{{ user.terminal }}</td>
-                        </tr>-->
+                            <td>{{ user.ward_number }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

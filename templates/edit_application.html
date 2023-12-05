@@ -286,7 +286,22 @@
         }
         
         
+        .apply-card {
+            margin-top: 40px; /* Add space between the sidebar and the form */
+        }
 
+        /* Reduce space between form fields */
+        .form-group {
+            margin-bottom: 10px; /* Adjust the margin as needed */
+        }
+
+        /* Add heading for Job Card Application form */
+        .apply-card h2 {
+            margin-bottom: 20px; /* Adjust the margin as needed */
+        }
+        .container {
+            margin-top: 100px;
+        }
     </style>
 </head>
 <body>
@@ -295,10 +310,9 @@
       <div class="user-profile">
           <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
           <span>Welcome, {{user.username}}</span>
-          <a href="edit_profile">Profile</a>
       </div>
       {% if user.is_authenticated %}
-      <a href={% url 'logout' %}class="btn btn-primary ml-lg-3">Logout</a>
+      <a href={% url 'logout' %} class="btn btn-primary ml-lg-3">Logout</a>
       {% else %}
       <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
       {% endif %}        <!--<button class="logout-button">Logout</button>-->
@@ -307,12 +321,12 @@
     <!-- Sidebar -->
                     <div class="sidebar">
                         <ul>
-                            <li><a href="job_card_application">Apply for Thozil Card</a></li>
+                            <li><a href="job_card_application">Apply for Job Card</a></li>
                             <li><a href="view_user_jobcard">View Job Card</a></li>
                             <li><a href="select_user_job">Working Days Selection</a></li>
+                            <li><a href="view_select_user_job">View Working Days</a></li>
                             <li><a href="#">Notifications</a></li>
-                            <li><a href="#">Application for Work</a></li>
-                            <!-- <li><a href="">Blocked users</a></li> -->
+                            <li><a href="edit_profile">Profile</a></li>
                         </ul>
                     </div>
 
@@ -321,134 +335,135 @@
         <!-- Content area for each feature -->
         <!-- Apply for Thozil Card -->
         <div class="apply-card">
-            <h2>Job Card Application</h2>
+            <h2>Edit Job Card Application</h2>
             <!-- Success message -->
             <!--<div class="success-message">
                 Form submitted successfully! Click the button below to download your PDF.
                 <a id="download-button" class="download-button" href="job_card_application.pdf">Download PDF</a>
             </div>-->
-
-            <form method="post" action="{% url 'edit_application' job_card.id %}">
-            {% csrf_token %}
-            <table>
+            <div class="container">
+                <form method="post" action="{% url 'edit_application' job_card.id %}">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <div class="form-group">
+                            <td><label for="applicant_name">Applicant Name</label></td>
+                            <td><input type="text" id="applicant_name" name="applicant_name" value="{{ job_card.applicant_name }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td><label for="phone_number">Phone Number</label></td>
+                            <td><input type="text" id="phone_number" name="phone_number" value="{{ job_card.phone_number }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td><label for="email">Email ID</label></td>
+                            <td><input type="email" id="email" name="email" value="{{ job_card.email }}" required pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td> <label for="house_name">House Name</label></td>
+                            <td> <input type="text" id="house_name" name="house_name" value="{{ job_card.house_name }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td> <label for="house_number">House Number</label></td>
+                            <td><input type="text" id="house_number" name="house_number" value="{{ job_card.house_number }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td> <label for="panchayath">Panchayath</label></td>
+                            <td><input type="text" id="panchayath" name="panchayath" value="{{ job_card.panchayath }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td> <label for="city">City</label></td>
+                            <td> <input type="text" id="city" name="city" value="{{ job_card.city }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td> <label for="district">District</label></td>
+                            <td> <input type="text" id="district" name="district" value="{{ job_card.district }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td><label for="ration_card_number">Ration Card Number</label></td>
+                            <td> <input type="text" id="ration_card_number" name="ration_card_number" value="{{ job_card.ration_card_number }}" required></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td><label for="category">Category</label></td>
+                            <td><select id="category" name="category">
+                                <option value="SC" {% if job_card.category == "SC" %}selected{% endif %}>SC</option>
+                                <option value="ST" {% if job_card.category == "ST" %}selected{% endif %}>ST</option>
+                                <option value="OBC" {% if job_card.category == "OBC" %}selected{% endif %}>OBC</option>
+                                <option value="Other" {% if job_card.category == "Other" %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td> <label for="has_household_latrine">Having Household Latrine</label></td>
+                            <td> <input type="radio" id="has_household_latrine_yes" name="has_household_latrine" value="1" {% if job_card.household_latrine == "Yes" %}checked{% endif %} required>
+                                <label for="has_household_latrine_yes">Yes</label>
+                                <input type="radio" id="has_household_latrine_no" name="has_household_latrine" value="0" {% if job_card.household_latrine == 0 %}checked{% endif %}>
+                                <label for="has_household_latrine_no">No</label>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                        <td> <label for="indira_avas_yojana">Beneficiary of Indira Avas Yojana</label></td>
+                        <td><input type="radio" id="indira_avas_yojana_yes" name="indira_avas_yojana" value="Yes"{% if job_card.indira_avas_yojana %}checked{% endif %}  required>
+                        <label for="indira_avas_yojana_yes">Yes</label>
+                        <input type="radio" id="indira_avas_yojana_no" name="indira_avas_yojana" {% if job_card.indira_avas_yojana %}checked{% endif %}  value="No">
+                        <label for="indira_avas_yojana_no">No</label></td>
+                        </div>
+                    </tr>
+                    <tr>
+                        <div class="form-group">
+                            <td><label for="rofr_act">Beneficiary of RoFR Act (Recognition of Forest Right Act)</label></td>
+                            <td><input type="radio" id="rofr_act_yes" name="rofr_act"{% if job_card.rofr_act %}checked{% endif %}  required>
+                            <label for="rofr_act_yes">Yes</label>
+                            <input type="radio" id="rofr_act_no" name="rofr_act" {% if job_card.rofr_act %}checked{% endif %} required >
+                            <label for="rofr_act_no">No</label></td>
+                        </div>
+                    </tr>
+                <!--<h2>Table</h2>
+                <table>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Name of the Land Holding</th>
+                        <th>Type of Land</th>
+                        <th>Survey Number</th>
+                        <th>Extension in Acer</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="text" name="land_name_1"></td>
+                        <td><input type="text" name="land_type_1"></td>
+                        <td><input type="text" name="survey_number_1"></td>
+                        <td><input type="text" name="extension_acer_1"></td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                <!--</table>-->
+                <input type="hidden" name="application_id" value="{{ application_id }}">
                 <tr>
                     <div class="form-group">
-                        <td><label for="applicant_name">Applicant Name</label></td>
-                        <td><input type="text" id="applicant_name" name="applicant_name" value="{{ job_card.applicant_name }}" required></td>
+                    <td><input type="submit" class="submit-button" value="Submit" align="center"></td>
                     </div>
                 </tr>
-                <tr>
-                    <div class="form-group">
-                        <td><label for="phone_number">Phone Number</label></td>
-                        <td><input type="text" id="phone_number" name="phone_number" value="{{ job_card.phone_number }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td><label for="email">Email ID</label></td>
-                        <td><input type="email" id="email" name="email" value="{{ job_card.email }}" required pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td> <label for="house_name">House Name</label></td>
-                        <td> <input type="text" id="house_name" name="house_name" value="{{ job_card.house_name }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td> <label for="house_number">House Number</label></td>
-                        <td><input type="text" id="house_number" name="house_number" value="{{ job_card.house_number }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td> <label for="panchayath">Panchayath</label></td>
-                        <td><input type="text" id="panchayath" name="panchayath" value="{{ job_card.panchayath }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td> <label for="city">City</label></td>
-                        <td> <input type="text" id="city" name="city" value="{{ job_card.city }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td> <label for="district">District</label></td>
-                        <td> <input type="text" id="district" name="district" value="{{ job_card.district }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td><label for="ration_card_number">Ration Card Number</label></td>
-                        <td> <input type="text" id="ration_card_number" name="ration_card_number" value="{{ job_card.ration_card_number }}" required></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td><label for="category">Category</label></td>
-                        <td><select id="category" name="category">
-                            <option value="SC" {% if job_card.category == "SC" %}selected{% endif %}>SC</option>
-                            <option value="ST" {% if job_card.category == "ST" %}selected{% endif %}>ST</option>
-                            <option value="OBC" {% if job_card.category == "OBC" %}selected{% endif %}>OBC</option>
-                            <option value="Other" {% if job_card.category == "Other" %}selected{% endif %}>Other</option>
-                        </select>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td> <label for="has_household_latrine">Having Household Latrine</label></td>
-                        <td> <input type="radio" id="has_household_latrine_yes" name="has_household_latrine" value="1" {% if job_card.household_latrine == "Yes" %}checked{% endif %} required>
-                            <label for="has_household_latrine_yes">Yes</label>
-                            <input type="radio" id="has_household_latrine_no" name="has_household_latrine" value="0" {% if job_card.household_latrine == 0 %}checked{% endif %}>
-                            <label for="has_household_latrine_no">No</label>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                    <td> <label for="indira_avas_yojana">Beneficiary of Indira Avas Yojana</label></td>
-                    <td><input type="radio" id="indira_avas_yojana_yes" name="indira_avas_yojana" value="Yes"{% if job_card.indira_avas_yojana %}checked{% endif %}  required>
-                    <label for="indira_avas_yojana_yes">Yes</label>
-                    <input type="radio" id="indira_avas_yojana_no" name="indira_avas_yojana" {% if job_card.indira_avas_yojana %}checked{% endif %}  value="No">
-                    <label for="indira_avas_yojana_no">No</label></td>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="form-group">
-                        <td><label for="rofr_act">Beneficiary of RoFR Act (Recognition of Forest Right Act)</label></td>
-                        <td><input type="radio" id="rofr_act_yes" name="rofr_act"{% if job_card.rofr_act %}checked{% endif %}  required>
-                        <label for="rofr_act_yes">Yes</label>
-                        <input type="radio" id="rofr_act_no" name="rofr_act" {% if job_card.rofr_act %}checked{% endif %} required >
-                        <label for="rofr_act_no">No</label></td>
-                    </div>
-                </tr>
-            <!--<h2>Table</h2>
-            <table>
-                <tr>
-                    <th>Sl No</th>
-                    <th>Name of the Land Holding</th>
-                    <th>Type of Land</th>
-                    <th>Survey Number</th>
-                    <th>Extension in Acer</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td><input type="text" name="land_name_1"></td>
-                    <td><input type="text" name="land_type_1"></td>
-                    <td><input type="text" name="survey_number_1"></td>
-                    <td><input type="text" name="extension_acer_1"></td>
-                </tr>
-                <!-- Add more rows as needed -->
-            <!--</table>-->
-            <input type="hidden" name="application_id" value="{{ application_id }}">
-            <tr>
-                <div class="form-group">
-                <td><input type="submit" class="submit-button" value="Submit" align="center"></td>
-                </div>
-            </tr>
-        </form>
-    </div>
+            </form>
+        </div>
+        </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Get the form and the input element

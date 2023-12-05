@@ -13,7 +13,7 @@ urlpatterns = [
     path('dashworker',views.dashworker,name="dashworker"),
     path('dashmember',views.dashmember,name="dashmember"),
     path('admindashboard',views.admindashboard,name="admindashboard"),
-
+    path('panchayath_details',views.panchayath_details,name="panchayath_details"),
 
 
     #path('admin_index/', views.admin_index, name='admin_index'),
@@ -31,6 +31,7 @@ urlpatterns = [
     path('job_card_application', views.job_card_application, name='job_card_application'),
     path('admin_view_job_cards',views.admin_view_job_cards,name='admin_view_job_cards'),
     path('member',views.member,name='member'),
+    path('toggle_member_status/<int:user_id>/', views.toggle_member_status, name='toggle_member_status'),
     path('worker',views.worker,name='worker'),
     path('user',views.user,name='user'),
     path('view_user_jobcard',views.view_user_jobcard,name='view_user_jobcard'),
@@ -41,6 +42,8 @@ urlpatterns = [
     path('admin_approve_reject<int:job_card_id><str:action>', views.admin_approve_reject, name='admin_approve_reject'),
 
 
+    path('worker_profile',views.worker_profile,name="worker_profile"),
+    path('worker_view_profile',views.worker_view_profile,name="worker_view_profile"),
 
 
     path('member_view_worker_list', views.member_view_worker_list, name='member_view_worker_list'),
@@ -56,12 +59,26 @@ urlpatterns = [
 
     path('select_user_job', views.select_user_job, name='select_user_job'),
     path('view_select_user_job', views.view_select_user_job, name='view_select_user_job'),
-    path('edit_select_user_job/<int:user_select_job_id>/', views.edit_select_user_job, name='edit_select_user_job'),    path('member_approve_reject/<int:user_selected_job_id>/<str:status>/',views. member_approve_reject, name='member_approve_reject'),
+    path('edit_select_user_job<int:user_select_job_id>', views.edit_select_user_job, name='edit_select_user_job'), 
+    path('delete_select_user_job/<int:job_id>/', views.delete_select_user_job, name='delete_select_user_job'),   
+    path('member_approve_reject/<int:user_selected_job_id>/<str:status>/',views. member_approve_reject, name='member_approve_reject'),
+    
+    path('add_jobs', views.add_jobs, name="add_jobs"),
+    path('view_add_job',views.view_add_job,name="view_add_job"),
+    path('edit_job<int:job_id>', views.edit_job, name='edit_job'),
+    path('deleted_jobs<int:job_id>', views.delete_jobs, name='deleted_jobs'),
 
-    path('add_job/',views.add_job, name='add_job'),
-    path('edit_job/<int:job_id>/', views.edit_job, name='edit_job'),
-    path('delete_job/<int:job_id>', views.delete_job, name='delete_job'),
 
+
+    path('add_member',views.add_member,name="add_member"),
+
+
+
+
+    path('admin_view_user_job', views.admin_view_user_job, name='admin_view_user_job'),
+    path('admin_toggle_approval<int:user_job_id>', views.admin_toggle_approval, name='admin_toggle_approval'),
+
+    
     #path('accounts/login/', views.login, name='login'),
     path('logout/',views.logout,name="logout"),
 

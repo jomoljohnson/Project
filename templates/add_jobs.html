@@ -1,3 +1,4 @@
+<!-- admin_dashboard.html -->
 
 <!DOCTYPE html>
                 <html lang="en">
@@ -116,6 +117,7 @@
                             <li><a href="add_jobs">Add job</a></li>
                             <li><a href="view_add_job">View jobs</a></li>
                             <li><a href="admin_view_user_job">User Jobs</a></li>
+
                         </ul>
                     </div>
                     <!-- Main content -->
@@ -133,60 +135,19 @@
                                 </div>
                             </div>-->
                             <div class="container">
-                                <div id="worker-list">
-                                    <!-- User table -->
-                                    <h2 class="page-title mt-4">Applied Job Card</h2>
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Applicant Name</th>
-                                                <th>Phone Number</th>
-                                                <th>Email</th>
-                                                <th>House Name</th>
-                                                <th>House Number</th>
-                                                <th>Panchayath</th>
-                                                <th>City</th>
-                                                <th>District</th>
-                                                <th>Ration Card Number</th>
-                                                <th>category</th>
-                                                <th>Household Latrine</th>
-                                                <th>Indira Avas Yojana</th>
-                                                <th> RoFR Act</th> 
-                                                <th>Action</th>                                               <!-- Add more table headers as needed -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for job in job_cards %}
-                                                <tr>
-                                                    <td>{{ job.applicant_name }}</td>
-                                                    <td>{{ job.phone_number }}</td>
-                                                    <td>{{ job.email }}</td>
-                                                    <td>{{ job.house_name }}</td>
-                                                    <td>{{ job.house_number }}</td>
-                                                    <td>{{ job.panchayath }}</td>
-                                                    <td>{{ job.city }}</td>
-                                                    <td>{{ job.district }}</td>
-                                                    <td>{{ job.ration_card_number }}</td>
-                                                    <td>{{ job.category }}</td>
-                                                    <td>{{ job.household_latrine }}</td>
-                                                    <td>{{ job.indira_avas_yojana }}</td>
-                                                    <td>{{ job.rofr_act }}</td>
-                                                    <td>
-                                                        {% if job.approval_status in 'Pending' or job.approval_status in 'Approved' or job.approval_status in 'Rejected' %}
-                                                            <form action="{% url 'admin_approve_reject' job.id 'approve' %}" method="post" class="approval-form">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="approval-button">Approve</button>
-                                                            </form>
-                                                    
-                                                            <form action="{% url 'admin_approve_reject' job.id 'reject' %}" method="post" class="approval-form">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="approval-button">Reject</button>
-                                                            </form>
-                                                        {% endif %}
-                                                    </td>                                                                                                                                                            
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                                <div class="container">
+                                    <!-- Add Job Form -->
+                                    <form method="post" action="{% url 'add_jobs' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="job_title">Job Title:</label>
+                                            <input type="text" name="job_title" class="form-control" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add Job</button>
+                                    </form>
+                            
+                                    <!-- Rest of the Admin Dashboard content -->
+                                </div>
                                     <!--<div class="pagination">
                                         <span class="step-links">
                                             {% if worker_users.has_previous %}

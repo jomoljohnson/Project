@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.http import HttpResponseForbidden
 # Create your views here.
 
 
@@ -85,7 +86,7 @@ def registration(request):
             return render(request, 'registration.html', {'error_message': 'Passwords do not match'})
 
         # Create a new user object
-        user = CustomUser.objects.create_user(username=username, email=email, password=password, user_type=user_type)
+        user = CustomUser.objects.create_user(username=username, email=email, password=password, user_type=user_type, is_verified=False)
         # You may want to do additional processing here if needed
         messages.success(request, 'Registration successful. You can now log in.')
         return redirect('login')  # Redirect to login page after successful registration
@@ -118,11 +119,14 @@ def login(request):
                 elif user.user_type == 'worker':
                     return redirect('dashworker')
                 elif user.user_type == 'Member':
+                    if not user.is_verified:
+                        error_message = 'Your account is not yet verified. Please wait for admin approval.'
+                        return render(request, 'login.html', {'error_message': error_message})
                     return redirect('dashmember')
-                # Pass the user's first name to the template
-               # return render(request, 'login.html', {'username': user.username})
                 else:
                     return redirect('admindashboard')
+                # Pass the user's first name to the template
+               # return render(request, 'login.html', {'username': user.username})
             else:
                 error_message = 'Invalid username or password'
                 return render(request, 'login.html', {'error_message': error_message})
@@ -132,17 +136,52 @@ def login(request):
     return response
 
 
-
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.urls import reverse
 
 
 def member(request):
+    members_to_approve = CustomUser.objects.filter(user_type='Member', is_verified=False)
     member_users = CustomUser.objects.filter(user_type='Member')
-    member_count=member_users.count()
+
     context = {
-                'member_users': member_users,
-                'member_count':member_count,
-             }
-    return render(request,'member.html',context)
+        'members_to_approve': members_to_approve,
+        'member_users': member_users,
+        'member_count': member_users.count(),
+    }
+
+    return render(request, 'member.html', context)
+
+
+def toggle_member_status(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id, user_type='Member')
+
+    # Toggle the member's status
+    user.is_verified = not user.is_verified
+    user.save()
+
+    return HttpResponseRedirect(reverse('member'))
+
+# views.py
+from django.shortcuts import render, redirect
+from .models import Member
+
+def add_member(request):
+    if request.method == 'POST':
+        ward_number = request.POST.get('ward_number')
+        member_name = request.POST.get('member_name')
+        member_email = request.POST.get('member_email')
+
+        Member.objects.create(
+            ward_number=ward_number,
+            member_name=member_name,
+            member_email=member_email
+        )
+
+
+    return render(request, 'add_member.html')
+
 
 
 def worker(request):
@@ -188,6 +227,27 @@ def logout(request):
 def admindashboard(request):
     users = CustomUser.objects.exclude(is_superuser=True)
     return render(request, 'admindashboard.html')
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import CustomUser, Panchayath
+
+
+@never_cache
+#@login_required(login_url='login')  # Adjust 'login' to your actual login URL
+def panchayath_details(request):
+    users = CustomUser.objects.exclude(is_superuser=True)
+
+    if request.method == 'POST':
+        # Retrieve the Panchayath name from the user input
+        panchayath_name = request.POST.get('panchayath_name')
+
+        # Check if the name is not empty
+        Panchayath.objects.create(name=panchayath_name)
+
+    return render(request, 'panchayath_details.html')
 
 
 
@@ -316,7 +376,7 @@ def fetchAndDisplayUsers(request, userType):
 
 
 from .models import JobCard
-@login_required
+@never_cache
 def job_card_application(request):
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -434,7 +494,7 @@ def delete_job_card(request, job_card_id):
 
 
 
-@login_required
+
 def edit_profile(request):
     if request.method == 'POST':
         # Get updated data from the form
@@ -442,12 +502,16 @@ def edit_profile(request):
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
+        panchayath_name = request.POST['panchayath_name']
+        ward_number = request.POST['ward_number']
         # Update the user's profile with the new data
         user = request.user
         user.username = username
         user.email = email
         user.first_name = first_name
         user.last_name = last_name
+        user.panchayath_name = panchayath_name
+        user.ward_number = ward_number
         user.save()
 
         messages.success(request, 'Profile updated successfully')
@@ -455,6 +519,35 @@ def edit_profile(request):
 
     return render(request, 'edit_user_profile.html', {'user': request.user})
 
+
+
+def worker_profile(request):
+    if request.method == 'POST':
+        # Get updated data from the form
+        username = request.POST['username']
+        email = request.POST['email']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        panchayath_name = request.POST['panchayath_name']
+        ward_number = request.POST['ward_number']
+        # Update the user's profile with the new data
+        user = request.user
+        user.username = username
+        user.email = email
+        user.first_name = first_name
+        user.last_name = last_name
+        user.panchayath_name = panchayath_name
+        user.ward_number = ward_number
+        user.save()
+
+        messages.success(request, 'Profile updated successfully')
+        return redirect('worker_view_profile')
+
+    return render(request, 'worker_profile.html', {'user': request.user})
+
+
+def worker_view_profile(request):
+    return render(request,'worker_view_profile.html')
 
 
 def myprofile(request):
@@ -634,45 +727,37 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Job
 
-@login_required
-def add_job(request):
+def add_jobs(request):
     if request.method == 'POST':
         job_title = request.POST.get('job_title')
         Job.objects.create(title=job_title)
         # You can add additional logic or redirect to another page
-        return redirect('add_job')
-    return render(request, 'add_job.html')
+        return redirect('add_jobs')
+    return render(request, 'add_jobs.html')
+
+def view_add_job(request):
+    # Fetch all jobs from the database
+    jobs = Job.objects.all()
+
+    # Pass the jobs to the template
+    return render(request, 'view_add_job.html', {'jobs': jobs})
+
 
 def edit_job(request, job_id):
-    job = Job.objects.get(id=job_id)
-
+    job = get_object_or_404(Job, pk=job_id)
+    
     if request.method == 'POST':
-        new_job_title = request.POST.get('new_job_title')
-
-        # Validate if new_job_title is not empty
-        if not new_job_title:
-            messages.error(request, 'New job title cannot be empty.')
-            return redirect('add_job')
-
-        # Validate if the new job title already exists
-        if Job.objects.exclude(id=job_id).filter(title=new_job_title).exists():
-            messages.error(request, 'Job with the same title already exists.')
-            return redirect('add_job')
-
-        # If validation passes, update the job title
-        job.title = new_job_title
+        # Update job attributes based on form data
+        job.title = request.POST.get('job_title')  # Add other fields as needed
         job.save()
-        messages.success(request, f'Job "{new_job_title}" updated successfully.')
+        return redirect('view_add_job')  # Redirect to the admin dashboard or another page
 
-    return redirect('add_job')
+    return render(request, 'edit_job.html', {'job': job})
 
-def delete_job(request, job_id):
-    job = Job.objects.get(id=job_id)
-    job_title = job.title
+def delete_jobs(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
     job.delete()
-    messages.success(request, f'Job "{job_title}" deleted successfully.')
-
-    return redirect('add_job')
+    return redirect('view_add_job') 
 
 
 
@@ -682,21 +767,11 @@ from .models import UserSelectedJob
 
 @login_required
 def view_select_user_job(request):
-    if not request.user.is_authenticated:
-        # Handle unauthenticated user (redirect to login page, show an error message, etc.)
-        return redirect('login')  
-    user = request.user 
-    #user_profile = CustomUser.objects.get(username=request.user.username)
-    selected_works = UserSelectedJob.objects.filter(user=user)
-
+    user_selected_jobs = UserSelectedJob.objects.select_related('job').filter(user=request.user)
     context = {
-        'user': request.user,
-        'selected_works': selected_works,
+        'user_selected_jobs': user_selected_jobs,
     }
-
-
-    return render(request, 'edit_select_user_job.html', context)
-
+    return render(request, 'view_select_user_job.html', context)
 
 
 @login_required
@@ -715,3 +790,40 @@ def edit_select_user_job(request, user_select_job_id):
     return render(request, 'edit_select_user_job.html', context)
 
 
+
+def delete_select_user_job(request, job_id):
+    # Ensure the user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to the login page if the user is not authenticated
+
+    # Get the UserSelectedJob instance to be deleted
+    user_selected_job = get_object_or_404(UserSelectedJob, id=job_id, user=request.user)
+
+    # Handle the POST request for deletion
+    user_selected_job.delete()
+
+    return redirect('view_select_user_job')
+
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import UserSelectedJob
+
+def admin_view_user_job(request):
+    user_jobs = UserSelectedJob.objects.all()
+    return render(request, 'admin_view_user_job.html', {'user_jobs': user_jobs})
+
+def admin_toggle_approval(request, user_job_id):
+    user_job = UserSelectedJob.objects.get(id=user_job_id)
+    
+    # Toggle approval status
+    if user_job.status == 'Pending':
+        user_job.status = 'Approved'
+    elif user_job.status == 'Approved':
+        user_job.status = 'Rejected'
+    
+    user_job.save()
+    
+    return redirect('admin_view_user_jobs')
