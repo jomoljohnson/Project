@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f5f9; /* Use your preferred background color */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #f0f5f9; /* Use your preferred header background color */
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between; /* Align items horizontally */
+            align-items: center; /* Align items vertically */
+            width: 100%; /* Header width spans the whole page */
+            position: fixed; /* Fixed position for the header */
+            z-index: 1; /* Ensure the header appears above the sidebar */
+        }
+
+        /* Page title styles */
+        .page-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Logout button styles */
+        #logout-link {
+            background-color: #80a4c2; /* Use your preferred button background color */
+            color: #fff; /* Use your preferred button text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        #logout-link:hover {
+            background-color: #658da9; /* Use your preferred button hover background color */
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333; /* Use your preferred background color */
+            color: #fff; /* Use your preferred text color */
+            padding-top: 20px;
+            margin-top: 60px; /* Adjust margin to start after the header */
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            padding: 10px;
+        }
+
+        .sidebar a {
+            color: #fff; /* Use your preferred text color */
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #555; /* Use your preferred hover background color */
+        }
+
+        /* Main content styles */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px; /* Increase the max-width to 800px or any value you prefer */
+            margin: 100px auto; /* Center the container horizontally with auto margin */
+        }
+        .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        }
+        h1 {
+        text-align: center;
+        }
+        
+        /* Table styles */
+        table {
+            width: 100%; /* Make the table occupy 100% of the container's width */
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #dddddd;
+        }
+        
+        /* Button styles */
+        form {
+            display: inline;
+        }
+        
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+      <div class="user-profile">
+          <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+          <span>Welcome, {{user.username}}</span>
+        </div>
+        {% if user.is_authenticated %}
+        <a href={% url 'logout' %} id="logout-link" class="btn btn-primary ml-lg-3">Logout</a>
+        {% else %}
+        <a href="login.html" id="logout-link" class="btn btn-primary ml-lg-3">Login</a>
+        {% endif %}      <!--<button class="logout-button">Logout</button>-->
+  </div>
+
+    <div class="sidebar">
+        <ul>
+            <li><a href="worker_profile">Profile</a></li>
+            <!--<li><a href="#">Working days</a></li>
+            <li><a href="#">View Attendance</a></li>
+            <li><a href="#">Work Site Details</a></li>-->
+            <li><a href="worker_jobs">Jobs</a></li>
+            <li><a href="view_worker_job">Accepted Jobs</a></li>
+        </ul>
+    </div>
+    <!-- Main content -->
+    <div class="container">
+        <!-- Content area for each feature -->
+        <!-- Apply for Thozil Card -->
+        <div class="apply-card">
+            <h2 class="page-title">PROFILE</h2>
+            <div class="card-body">
+                <i class="fa fa-pen fa-xs edit"></i>
+                {% if accepted_jobs %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Applied By</th>
+                            <th>Total Work Days</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in accepted_jobs %}
+                            <tr>
+                                <td>{{ job.job_title }}</td>
+                                <td>{{ job.applied_by }}</td>
+                                <td>{{ job.total_work }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No accepted jobs found.</p>
+            {% endif %}
+
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

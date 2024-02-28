@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Admin Dashboard</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+                    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+                    <style>
+                
+                        body {
+                            font-family: 'Montserrat', sans-serif;
+                            background-color: #f0f5f9; /* Use your preferred background color */
+                            margin: 0;
+                            padding: 0;
+                        }
+                
+                        /* Header styles */
+                        .header {
+                            background-color: #f0f5f9; /* Use your preferred header background color */
+                            padding: 10px 20px;
+                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            justify-content: space-between; /* Align items horizontally */
+                            align-items: center; /* Align items vertically */
+                            width: 100%; /* Header width spans the whole page */
+                            position: fixed; /* Fixed position for the header */
+                            z-index: 1; /* Ensure the header appears above the sidebar */
+                        }
+                
+                        /* Page title styles */
+                        .page-title {
+                            font-size: 24px;
+                            margin-bottom: 20px;
+                        }
+                
+                        /* Logout button styles */
+                        #logout-link {
+                            background-color: #80a4c2; /* Use your preferred button background color */
+                            color: #fff; /* Use your preferred button text color */
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: 5px;
+                            text-decoration: none;
+                            transition: background-color 0.3s;
+                        }
+                
+                        #logout-link:hover {
+                            background-color: #658da9; /* Use your preferred button hover background color */
+                        }
+                
+                        /* Sidebar styles */
+                        .sidebar {
+                            height: 100%;
+                            width: 250px;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            background-color: #333; /* Use your preferred background color */
+                            color: #fff; /* Use your preferred text color */
+                            padding-top: 20px;
+                            margin-top: 60px; /* Adjust margin to start after the header */
+                        }
+                
+                        .sidebar ul {
+                            list-style: none;
+                            padding: 0;
+                        }
+                
+                        .sidebar li {
+                            padding: 10px;
+                        }
+                
+                        .sidebar a {
+                            color: #fff; /* Use your preferred text color */
+                            text-decoration: none;
+                            display: block;
+                        }
+                
+                        .sidebar a:hover {
+                            background-color: #555; /* Use your preferred hover background color */
+                        }
+                
+                        /* Main content styles */
+                        .content {
+                            margin-left: 250px;
+                            padding: 20px;
+                        }
+                
+                        .container {
+                            margin-top: 100px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <!-- Header -->
+                    <div class="header">
+                        <h1 class="page-title">Admin Dashboard</h1>
+                        <a href="{% url 'logout' %}" class="btn btn-primary" id="logout-link">Logout</a>
+                    </div>
+                
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <ul>
+                            <li><a href="panchayath_details">Panchayath Details </a></li>
+                            <li><a href="add_member">Add The Members Details </a></li>
+                            <li><a href="member">Member User</a></li>
+                            <li><a href="worker">Worker User</a></li>
+                            <li><a href="user">regular User</a></li>                     
+                            <li><a href="admin_view_job_cards">view User job Card</a></li>
+                            <li><a href="add_jobs">Add job</a></li>
+                            <li><a href="view_add_job">View jobs</a></li>
+
+                        </ul>
+                    </div>
+                    <!-- Main content -->
+                    <div class="content">
+                        <!-- Content area -->
+                        <div class="container">
+                            <!-- Panchayath Name Input -->
+                            <!-- Panchayath Name Input -->
+                            <form method="post" action="{% url 'panchayath_details' %}" id="addPanchayathForm">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="panchayath_name">Panchayath Name:</label>
+                                    <input type="text" name="panchayath_name" id="panchayath_name" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" name="submitBtn">Add</button>
+                            </form>
+
+                            
+                
+                            <!-- Form for Adding Members -->
+                            <form id="addMemberForm" action="#" id="addMemberForm">
+                                <h2 class="page-title mt-4">Add Member</h2>
+                                {% csrf_token %}
+                                <!-- Ward Number Input -->
+                                <div class="form-group">
+                                    <label for="ward_number">Ward Number:</label>
+                                    <input type="text" name="ward_number" id="ward_number" class="form-control" required>
+                                </div>
+                
+                                <!-- Member Name Input -->
+                                <div class="form-group">
+                                    <label for="member_name">Member Name:</label>
+                                    <input type="text" name="member_name" id="member_name" class="form-control" required>
+                                </div>
+                
+                                <!-- Member Email Input -->
+                                <div class="form-group">
+                                    <label for="member_email">Member Email:</label>
+                                    <input type="email" name="member_email" id="member_email" class="form-control" required>
+                                </div>
+                
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary">Add Member</button>
+                            </form>
+                
+                            <!-- Display Member List -->
+                            <div id="member-list">
+                                <!-- Member list will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Include jQuery -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                
+                    <!-- JavaScript for Handling Form Submission and Member List Display -->
+                    <script>
+                        $(document).ready(function () {
+                            // Flag to check if Panchayath Name is entered
+                            var panchayathNameEntered = false;
+                
+                            // Function to handle Panchayath Name addition
+                            $("#addPanchayath").click(function () {
+                                var enteredPanchayathName = $("#panchayath_name").val();
+                
+                                if (enteredPanchayathName && !panchayathNameEntered) {
+                                    // Panchayath Name is correct
+                                    alert("Panchayath Name is correct!");
+                                    panchayathNameEntered = true;
+                                    $("#panchayath_name").prop('disabled', true); // Disable the input
+                                } else if (panchayathNameEntered) {
+                                    // Panchayath Name already entered
+                                    alert("Panchayath Name has already been entered.");
+                                } else {
+                                    // Panchayath Name not entered
+                                    alert("Please enter a valid Panchayath Name.");
+                                }
+                            });
+                        $(document).ready(function () {
+                            // Function to handle form submission
+                            $("#addMemberForm").submit(function (event) {
+                                event.preventDefault();
+                
+                                // Get form data
+                                var formData = {
+                                    panchayath_name: $("#panchayath_name").val(),
+                                    ward_number: $("#ward_number").val(),
+                                    member_name: $("#member_name").val(),
+                                    member_email: $("#member_email").val()
+                                };
+                
+                                // TODO: Add AJAX request to submit form data to the server
+                
+                                // Display a success message (you can replace this with your logic)
+                                alert("Member added successfully!");
+                
+                                // TODO: Refresh or update the member list as needed
+                            });
+                        });
+                    </script>
+                                    
+
+                    
+    
+
+                    <!-- Include Bootstrap JS -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                </body>
+                </html>
+                
+                

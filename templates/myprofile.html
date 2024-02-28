@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,129 +90,6 @@
                         .container {
                             margin-top: 100px;
                         }
-
-        /* New styles for user-specific features */
-        /* Apply for Thozil Card styles */
-        /* Apply for Thozil Card styles */
-.apply-card-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-card-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Working days selection styles */
-.working-days-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.working-days-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Notification styles */
-.notifications-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.notifications-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Complaints styles */
-.complaints-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.complaints-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Application for Work styles */
-.apply-work-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-work-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Customized Working Place styles */
-.customized-place-button {
-    background-color: #F5F5F5;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.customized-place-button:hover {
-    background-color: #cccccc; /* Change the hover background color */
-}
-/* Sidebar styles */
-                        .sidebar {
-                            height: 100%;
-                            width: 250px;
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            background-color: #333; /* Use your preferred background color */
-                            color: #fff; /* Use your preferred text color */
-                            padding-top: 20px;
-                            margin-top: 60px; /* Adjust margin to start after the header */
-                        }
-                
-                        .sidebar ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                
-                        .sidebar li {
-                            padding: 10px;
-                        }
-                
-                        .sidebar a {
-                            color: #fff; /* Use your preferred text color */
-                            text-decoration: none;
-                            display: block;
-                        }
-                
-                        .sidebar a:hover {
-                            background-color: #555; /* Use your preferred hover background color */
-                        }
          .container {
             max-width: 600px;
             margin: 0 auto;
@@ -291,14 +168,14 @@
     <div class="header">
       <div class="user-profile">
           <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+          <img src="{% static 'images/img_icon.png' %}" alt="User Icon" style="width: 50px; height: 50px;"> <!-- Add your image source here -->
           <span>Welcome, {{user.username}}</span>
-          <a href="edit_profile">Profile</a>
-      </div>
-      {% if user.is_authenticated %}
-      <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
-      {% else %}
-      <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
-      {% endif %}        <!--<button class="logout-button">Logout</button>-->
+        </div>
+        {% if user.is_authenticated %}
+        <a href={% url 'logout' %} id="logout-link" class="btn btn-primary ml-lg-3">Logout</a>
+        {% else %}
+        <a href="login.html" id="logout-link" class="btn btn-primary ml-lg-3">Login</a>
+        {% endif %}      <!--<button class="logout-button">Logout</button>-->
   </div>
 
     <!-- Sidebar -->
@@ -306,10 +183,11 @@
                         <ul>
                             <li><a href="job_card_application">Apply for Job Card</a></li>
                             <li><a href="view_user_jobcard">View Job Card</a></li>
-                            <li><a href="#">Working Days Selection</a></li>
-                            <li><a href="#">Notifications</a></li>
-                            <li><a href="#">Application for Work</a></li>
-                            <li><a href="myprofile" class="active">Profile</a></li>
+                            <li><a href="select_user_job">Working Days Selection</a></li>
+                            <li><a href="view_select_user_job">View Working Days</a></li>
+                            <li><a href="complaints">complaints</a></li>
+                            <!--<li><a href="#">Notifications</a></li>-->
+                            <li><a href="edit_profile">Profile</a></li>
                             <li><a href="{% url 'edit_profile' %}">Edit Profile</a></li>
                             <!-- <li><a href="">Blocked users</a></li> -->
                         </ul>
@@ -346,16 +224,16 @@
                             <td>:</td>
                             <td>{{ user.last_name }}</td>
                         </tr>
-                        <!--<tr>
-                            <td>Post</td>
+                        <tr>
+                            <td>Panchayath Name</td>
                             <td>:</td>
-                            <td>{{ user.posts }}</td>
+                            <td>{{ user.panchayath_name }}</td>
                         </tr>
-                        <!--<tr>
-                            <td>Terminal</td>
+                        <tr>
+                            <td>Ward Number</td>
                             <td>:</td>
-                            <td>{{ user.terminal }}</td>
-                        </tr>-->
+                            <td>{{ user.ward_number }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

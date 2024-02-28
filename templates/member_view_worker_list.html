@@ -104,7 +104,7 @@
                             <span>Welcome, {{user.username}}</span>
                         </div>
                         {% if user.is_authenticated %}
-                        <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+                        <a href={% url 'logout' %} class="btn btn-primary ml-lg-3">Logout</a>
                         {% else %}
                         <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
                         {% endif %}        <!--<button class="logout-button">Logout</button>-->
@@ -161,62 +161,88 @@
                                                         {% endif %}
                                                     </td>
                                                     <td>
-                                                        {% if user.is_mentor %}
-                                                            <button class="btn btn-danger" onclick="removeMentor({{ user.id }})">Remove Mentor</button>
-                                                        {% else %}
-                                                            <button class="btn btn-success add-mentor-btn" data-user-id="{{ user.id }}" onclick="addMentor({{ user.id }})">Add Mentor</button>
-                                                        {% endif %}
+                                                        <button class="btn btn-success add-mentor-btn" data-user-id="{{ user.id }}" data-is-mentor="{{ user.is_mentor|yesno:'true,false' }}" onclick="toggleMentor(this)">Add Mentor</button>
                                                     </td>
+                                                    
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                    
-                                    <!-- ... Your existing HTML code ... -->
-                                    
-                                    <script>
-                                        function addMentor(userId) {
-                                            // Implement the logic to add the user with userId as a mentor
-                                            // You may want to use AJAX to send a request to your Django backend
-                                    
-                                            // Disable all "Add Mentor" buttons
-                                            disableAddMentorButtons();
-                                    
-                                            // Redirect to the appropriate URL
-                                            window.location.href = "/add_mentor/" + userId + "/";
-                                        }
-                                    
-                                        function removeMentor(userId) {
-                                            // Implement the logic to remove the user with userId as a mentor
-                                            // You may want to use AJAX to send a request to your Django backend
-                                    
-                                            // Enable all "Add Mentor" buttons
-                                            enableAddMentorButtons();
-                                    
-                                            // Redirect to the appropriate URL
-                                            window.location.href = "/remove_mentor/" + userId + "/";
-                                        }
-                                    
-                                        function disableAddMentorButtons() {
-                                            // Disable all "Add Mentor" buttons
-                                            var allButtons = document.getElementsByClassName('add-mentor-btn');
-                                            for (var i = 0; i < allButtons.length; i++) {
-                                                allButtons[i].disabled = true;
-                                            }
-                                        }
-                                    
-                                        function enableAddMentorButtons() {
-                                            // Enable all "Add Mentor" buttons
-                                            var allButtons = document.getElementsByClassName('add-mentor-btn');
-                                            for (var i = 0; i < allButtons.length; i++) {
-                                                allButtons[i].disabled = false;
-                                            }
-                                        }
-                                    </script>
+                                </div>
+                            </div>
+                            <!-- Your HTML template -->
 
-                    
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // Function to load the selected mentor from local storage on page load
+                                    function loadSelectedMentor() {
+                                        var selectedMentorId = localStorage.getItem('selectedMentorId');
+                                        if (selectedMentorId) {
+                                            // Update button labels and states based on the selected mentor
+                                            var buttons = document.querySelectorAll('.add-mentor-btn');
+                                            buttons.forEach(function(btn) {
+                                                if (btn.dataset.userId === selectedMentorId) {
+                                                    btn.textContent = 'Remove Mentor';
+                                                    btn.classList.remove('btn-success');
+                                                    btn.classList.add('btn-danger');
+                                                } else {
+                                                    btn.textContent = 'Add Mentor';
+                                                    btn.classList.remove('btn-danger');
+                                                    btn.classList.add('btn-success');
+                                                }
+                                            });
+                                            disableAddMentorButtons(selectedMentorId); // Disable all other "Add Mentor" buttons
+                                        }
+                                    }
+                                
+                                    // Call the function to load the selected mentor on page load
+                                    loadSelectedMentor();
+                                
+                                    // Function to handle mentor selection
+                                    function toggleMentor(button) {
+                                        var userId = button.dataset.userId;
+                                        var isMentor = button.dataset.isMentor === 'true'; // Convert to boolean
+                                
+                                        // Toggle mentor status locally
+                                        if (isMentor) {
+                                            button.textContent = 'Add Mentor';
+                                            button.classList.remove('btn-danger');
+                                            button.classList.add('btn-success');
+                                            enableAddMentorButtons(); // Enable all "Add Mentor" buttons
+                                            localStorage.removeItem('selectedMentorId'); // Clear selected mentor from local storage
+                                        } else {
+                                            button.textContent = 'Remove Mentor';
+                                            button.classList.remove('btn-success');
+                                            button.classList.add('btn-danger');
+                                            disableAddMentorButtons(userId); // Disable other "Add Mentor" buttons
+                                            localStorage.setItem('selectedMentorId', userId); // Store selected mentor ID in local storage
+                                        }
+                                
+                                        // Toggle mentor status (no AJAX request in this example)
+                                        button.dataset.isMentor = !isMentor;
+                                    }
+                                
+                                    function enableAddMentorButtons() {
+                                        var buttons = document.querySelectorAll('.add-mentor-btn');
+                                        buttons.forEach(function(btn) {
+                                            btn.disabled = false;
+                                        });
+                                    }
+                                
+                                    function disableAddMentorButtons(selectedUserId) {
+                                        var buttons = document.querySelectorAll('.add-mentor-btn');
+                                        buttons.forEach(function(btn) {
+                                            if (btn.dataset.userId !== selectedUserId) {
+                                                btn.disabled = true;
+                                            }
+                                        });
+                                    }
+                                });
+                                </script>
+                                
+                                <!-- Rest of your HTML template -->
     
-
+                                
                     <!-- Include Bootstrap JS -->
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

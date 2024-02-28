@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,139 +88,13 @@
                         }
                 
                         .container {
-                            margin-top: 100px;
+                            max-width: 500px;
+                            margin: 0 auto;
+                            background-color: #fff;
+                            padding: 20px;
+                            border-radius: 5px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                         }
-
-        /* New styles for user-specific features */
-        /* Apply for Thozil Card styles */
-        /* Apply for Thozil Card styles */
-.apply-card-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-card-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Working days selection styles */
-.working-days-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.working-days-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Notification styles */
-.notifications-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.notifications-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Complaints styles */
-.complaints-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.complaints-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Application for Work styles */
-.apply-work-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-work-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Customized Working Place styles */
-.customized-place-button {
-    background-color: #F5F5F5;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.customized-place-button:hover {
-    background-color: #cccccc; /* Change the hover background color */
-}
-/* Sidebar styles */
-                        .sidebar {
-                            height: 100%;
-                            width: 250px;
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            background-color: #333; /* Use your preferred background color */
-                            color: #fff; /* Use your preferred text color */
-                            padding-top: 20px;
-                            margin-top: 60px; /* Adjust margin to start after the header */
-                        }
-                
-                        .sidebar ul {
-                            list-style: none;
-                            padding: 0;
-                        }
-                
-                        .sidebar li {
-                            padding: 10px;
-                        }
-                
-                        .sidebar a {
-                            color: #fff; /* Use your preferred text color */
-                            text-decoration: none;
-                            display: block;
-                        }
-                
-                        .sidebar a:hover {
-                            background-color: #555; /* Use your preferred hover background color */
-         }
-         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
         h1 {
             text-align: center;
         }
@@ -253,11 +128,11 @@
     <div class="header">
         <div class="user-profile">
             <i class="fa fa-user" aria-hidden="true"></i> <!-- Replace this with the icon you prefer -->
+            <img src="{% static 'images/img_icon.png' %}" alt="User Icon" style="width: 50px; height: 50px;"> <!-- Add your image source here -->
             <span>Welcome, {{user.username}}</span>
-            <a href="edit_profile">Profile</a>
         </div>
         {% if user.is_authenticated %}
-        <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+        <a href={% url 'logout' %} class="btn btn-primary ml-lg-3">Logout</a>
         {% else %}
         <a href="login.html" class="btn btn-primary ml-lg-3">Login</a>
         {% endif %}        <!--<button class="logout-button">Logout</button>-->
@@ -268,10 +143,11 @@
                         <ul>
                             <li><a href="job_card_application">Apply for Job Card</a></li>
                             <li><a href="view_user_jobcard">View Job Card</a></li>
-                            <li><a href="#">Working Days Selection</a></li>
-                            <li><a href="#">Notifications</a></li>
-                            <li><a href="#">Application for Work</a></li>
-                            <!-- <li><a href="">Blocked users</a></li> -->
+                            <li><a href="select_user_job">Working Days Selection</a></li>
+                            <li><a href="view_select_user_job">View Working Days</a></li>
+                            <li><a href="complaints">complaints</a></li>
+                            <!--<li><a href="#">Notifications</a></li>-->
+                            <li><a href="edit_profile">Profile</a></li>
                         </ul>
                     </div>
 
@@ -288,25 +164,273 @@
                 <label for="email">Email:</label>
                 <input type="email" name="email" id="email" value="{{ user.email }}" required>
             </div>
-			
-			
-			<div class="form-group">
+            <div class="form-group">
                 <label for="first_name">First Name:</label>
-                <input type="first_name" name="first_name" id="first_name" value="{{ user.first_name }}" required>
+                <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
             </div>
-			<div class="form-group">
+            <div class="form-group">
                 <label for="last_name">Last Name:</label>
-                <input type="last_name" name="last_name" id="last_name" value="{{ user.last_name }}" required>
+                <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" required>
             </div>
-			
-	   <!-- Add more fields here if needed -->
+            <div class="form-group">
+                <label for="panchayath_name">Panchayath Name:</label>
+                <input type="text" name="panchayath_name" id="panchayath_name" value="{{ user.panchayath_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="ward_number">Ward Number:</label>
+                <input type="text" name="ward_number" id="ward_number" value="{{ user.ward_number }}" required>
+            </div>
             <button type="submit">Save Changes</button>
         </form>
     </div>
+    <script>
+        function validateForm() {
+            var username = document.getElementById("username").value.trim();
+            var email = document.getElementById("email").value.trim();
+            var firstName = document.getElementById("first_name").value.trim();
+            var lastName = document.getElementById("last_name").value.trim();
+            var panchayathName = document.getElementById("panchayath_name").value.trim();
+            var wardNumber = document.getElementById("ward_number").value.trim();
+    
+            var usernamePattern = /^[a-zA-Z\s]+$/;
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var namePattern = /^[a-zA-Z\s]+$/;
+            var panchayathPattern = /^[a-zA-Z\s]+$/;
+            var wardPattern = /^\d+$/;
+    
+            if (!username.match(usernamePattern)) {
+                alert("Username should contain only letters.");
+                return false;
+            }
+    
+            if (!email.match(emailPattern)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+    
+            if (!firstName.match(namePattern)) {
+                alert("First name should contain only letters.");
+                return false;
+            }
+    
+            if (!lastName.match(namePattern)) {
+                alert("Last name should contain only letters.");
+                return false;
+            }
+    
+            if (!panchayathName.match(panchayathPattern)) {
+                alert("Panchayath name should contain only letters.");
+                return false;
+            }
+    
+            if (!wardNumber.match(wardPattern)) {
+                alert("Ward number should contain only numbers.");
+                return false;
+            }
+    
+            return true; // Submit the form if all validations pass
+        }
+    </script>
 
     <!-- Include jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Bot</title>
+    <style>
+        .chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .chat-icon img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 50px; /* Adjust this value as per your preference */
+            right: 50px;
+            width: 300px;
+            height: 400px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        
+
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .chat-input {
+            padding: 10px;
+        }
+
+        .chat-input input[type="text"] {
+            width: 70%;
+            padding: 5px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .chat-input button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background-color: #0056b3;
+        }
+        /* Style for sender (user) messages */
+        .message.sender {
+            background-color: #007bff; /* Blue color for user messages */
+            color: #fff; /* White text color for user messages */
+            margin-left: auto; /* Align sender messages to the right */
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%; /* Limit sender message width */
+        }
+
+        /* Style for receiver (chatbot) messages */
+        .message.receiver {
+            background-color: #f0f0f0; /* Light gray color for chatbot messages */
+            color: #000; /* Black text color for chatbot messages */
+            margin-right: auto; /* Align receiver messages to the left */
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%; /* Limit receiver message width */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Chatbot icon -->
+    <div class="chat-icon" id="chat-icon">
+        <img src="{% static 'images/chat-icon.png' %}" alt="Chat Logo">
+    </div>
+
+    <!-- Chatbot container -->
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header">
+            <h3>Chat Bot</h3>
+            <button id="close-chat" onclick="closeChat()">X</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Previous messages -->
+            <div class="message receiver">Hi! How can I help you?</div>
+           
+        </div>
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        var chatIcon = document.getElementById('chat-icon');
+        var chatContainer = document.getElementById('chat-container');
+        var messageInput = document.getElementById('message-input');
+        var chatMessages = document.getElementById('chat-messages');
+
+        // Display or hide the chat container when the chat icon is clicked
+        chatIcon.addEventListener('click', function() {
+            chatContainer.style.display = chatContainer.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close the chat container
+        function closeChat() {
+            chatContainer.style.display = 'none';
+        }
+
+        // Function to send a message
+        function sendMessage() {
+            var message = messageInput.value.trim();
+            if (message !== '') {
+                // Append the message to the chat
+                chatMessages.innerHTML += '<div class="message">You: ' + message + '</div>';
+                // Clear the input field
+                messageInput.value = '';
+                // Simulate a reply (you can replace this with actual logic)
+                setTimeout(function() {
+                    chatMessages.innerHTML += '<div class="message">Chat Bot: Thanks for your message!</div>';
+                }, 1000);
+            }
+        }
+        function sendMessage() {
+            var messageInput = document.getElementById('message-input');
+            var message = messageInput.value.trim();
+            
+            if (message !== '') {
+                // Create a new message element for user message
+                var messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messageElement.classList.add('message', 'sender');
+        
+                // Append the message to the chat
+                document.getElementById('chat-messages').appendChild(messageElement);
+        
+                // Clear the input field
+                messageInput.value = '';
+        
+                // Simulate a chatbot response (replace with actual chatbot logic)
+                setTimeout(function() {
+                    var botResponse = 'Thank you for your message!';
+                    receiveMessage(botResponse);
+                }, 1000);
+            }
+        }
+        
+        function receiveMessage(message) {
+            // Create a new message element for chatbot message
+            var messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messageElement.classList.add('message', 'receiver');
+        
+            // Append the message to the chat
+            document.getElementById('chat-messages').appendChild(messageElement);
+        }
+        
+    </script>
 </body>
 </html>
