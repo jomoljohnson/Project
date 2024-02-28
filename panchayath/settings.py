@@ -136,7 +136,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jomolmariyajohnson2024b@mca.ajce.in'
-EMAIL_HOST_PASSWORD = 'Jomoljohnson@123'
+EMAIL_HOST_PASSWORD = 'cgdmsjydeksftfyx'
 
 
 
@@ -154,3 +154,9 @@ AUTHENTICATION_BACKENDS = (
     'home.auth_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+
+
+
+#cgdmsjydeksftfyx

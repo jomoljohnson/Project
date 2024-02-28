@@ -10,10 +10,12 @@ class CustomUser(AbstractUser):
     is_verified = models.BooleanField(default=False)
     panchayath_name = models.CharField(max_length=100, blank=True, null=True,default='')
     ward_number = models.CharField(max_length=10, blank=True, null=True,default='')
+    has_edited_profile = models.BooleanField(default=False)
     def __str__(self):
+        self.has_edited_profile = True
+        self.save()
         return self.username
     
-
 
 class JobCard(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)    
@@ -67,14 +69,16 @@ class Job(models.Model):
     def __str__(self):
         return self.title
 
+
+
 class Notification(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    date = models.DateField()
-    is_confirmed = models.BooleanField(default=False)
+    content = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.job.title} - {self.date}"
+        return self.content
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -108,3 +112,33 @@ class Member(models.Model):
 
     def __str__(self):
         return self.member_name
+    
+class Complaint(models.Model):
+    COMPLAINT_TYPES = [
+        ('work_related', 'Work Related'),
+        ('job_card_related', 'Job Card Related'),
+        ('workers_job_related', "Worker's Job Related"),
+    ]
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    complaint_type = models.CharField(max_length=20, choices=COMPLAINT_TYPES)
+    complaint = models.TextField()
+    admin_response = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Complaint from {self.user.username}'
+
+
+
+
+class JobAccepted(models.Model):
+    worker = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    job_title = models.CharField(max_length=100)
+    content = models.TextField()
+    total_work = models.IntegerField(default=0)
+    applied_by = models.CharField(max_length=150)  # Field to store the applied job information
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.worker.username} - {self.job_title}"
