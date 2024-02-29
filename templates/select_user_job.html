@@ -9,10 +9,13 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-                            font-family: 'Montserrat', sans-serif;
-                            background-color: #f0f5f9; /* Use your preferred background color */
-                            margin: 0;
-                            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f5f9;
+            margin: 0;
+            padding: 0;
+            background-image:url('{% static 'images/bg-01.jpg' %}');
+            background-size: cover;
+            background-position: center;
                         }
                 
                         /* Header styles */
@@ -393,24 +396,24 @@
                         <tr>
                             <td><label for="job">Select a Job:</label></td>
                             <td>
-                                <select name="job_id" id="job">
+                                <select name="job_id" id="job" style="background-color: rgba(255, 255, 255, 0.5);">
                                     {% for job in jobs %}
-                                        <option value="{{ job.id }}">{{ job.title }}</option>
+                                        <option value="{{ job.id }}" style="background-color: rgba(255, 255, 255, 0.5);">{{ job.title }}</option>
                                     {% endfor %}
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td><label for="start_date">Select Start Date:</label></td>
-                            <td><input type="date" name="start_date" id="start_date" required></td>
+                            <td><input type="date" name="start_date" id="start_date" required style="background-color: rgba(255, 255, 255, 0.5);"></td>
                         </tr>
                         <tr>
                             <td><label for="end_date">Select End Date:</label></td>
-                            <td><input type="date" name="end_date" id="end_date" required></td>
+                            <td><input type="date" name="end_date" id="end_date" required style="background-color: rgba(255, 255, 255, 0.5);"></td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <button type="submit">Submit</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </td>
                             <p>Remaining Working Days: <strong>{{ remaining_working_days }}</strong></p>
                         </tr>

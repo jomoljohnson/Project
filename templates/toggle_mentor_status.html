@@ -161,48 +161,48 @@
                                                         {% endif %}
                                                     </td>
                                                     <td>
-                                                        <input type="radio" name="mentor" value="{{ user.id }}" data-is-mentor="{{ user.is_mentor|yesno:'true,false' }}" onclick="toggleMentor(this)">
-                                                    </td>
-                                                    
+                                                        <button onclick="toggleMentor('{{ user.id }}', this)" {% if user.is_mentor %}disabled{% endif %}>
+                                                            {% if user.is_mentor %}
+                                                                Remove Mentor
+                                                            {% else %}
+                                                                Add Mentor
+                                                            {% endif %}
+                                                        </button>
+                                                    </td>                                                 
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                           <!-- Include jQuery before this script -->
                             <script>
-                                function toggleMentor(radio) {
-                                    var userId = radio.value;
-                                    var isMentor = radio.dataset.isMentor === 'true'; // Convert to boolean
-
+                                function toggleMentor(userId, isMentor) {
                                     // Toggle mentor status locally
-                                    var allRadios = document.getElementsByName('mentor');
-                                    allRadios.forEach(function(r) {
-                                        if (r !== radio) {
-                                            r.checked = false;
-                                        }
+                                    var allButtons = document.querySelectorAll('.add-mentor-button');
+                                    allButtons.forEach(function(button) {
+                                        button.disabled = true; // Disable all buttons first
                                     });
-
-                                    // Toggle mentor status (send AJAX request to update database)
+                                    event.target.disabled = true; // Disable the clicked button
+                                    
+                                    // Send AJAX request to update mentor status
                                     $.ajax({
                                         type: "POST",
-                                        url: `/toggle_mentor_status/${userId}/`, // Make sure this URL matches your Django endpoint
+                                        url: `/toggle_mentor_status/${userId}/`,
                                         data: {
-                                            'csrfmiddlewaretoken': '{{ csrf_token }}',  // Add CSRF token for security
-                                            'is_mentor': !isMentor // Send the updated mentor status
+                                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                                            is_mentor: !isMentor
                                         },
                                         dataType: "json",
-                                        success: function (data) {
-                                            console.log(data.message); // Log success message (optional)
+                                        success: function(data) {
+                                            console.log(data.message);
                                         },
-                                        error: function (xhr, status, error) {
+                                        error: function(xhr, status, error) {
                                             console.error('Error toggling mentor status:', error);
                                         }
                                     });
                                 }
                             </script>
-
+                            
                                 
                     <!-- Include Bootstrap JS -->
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

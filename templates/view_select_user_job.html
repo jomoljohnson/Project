@@ -9,10 +9,13 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-                            font-family: 'Montserrat', sans-serif;
-                            background-color: #f0f5f9; /* Use your preferred background color */
-                            margin: 0;
-                            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f5f9;
+            margin: 0;
+            padding: 0;
+            background-image:url('{% static 'images/bg-01.jpg' %}');
+            background-size: cover;
+            background-position: center;
                         }
                 
                         /* Header styles */
@@ -91,97 +94,7 @@
                             margin-top: 100px;
                         }
 
-        /* New styles for user-specific features */
-        /* Apply for Thozil Card styles */
-        /* Apply for Thozil Card styles */
-.apply-card-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-card-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Working days selection styles */
-.working-days-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.working-days-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Notification styles */
-.notifications-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.notifications-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Complaints styles */
-.complaints-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.complaints-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Application for Work styles */
-.apply-work-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-work-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Customized Working Place styles */
-.customized-place-button {
-    background-color: #F5F5F5;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.customized-place-button:hover {
-    background-color: #cccccc; /* Change the hover background color */
-}
+      
 /* Sidebar styles */
                         .sidebar {
                             height: 100%;
@@ -302,6 +215,8 @@
         .container {
             margin-top: 100px;
         }
+
+
     </style>
 </head>
 <script>
@@ -384,7 +299,7 @@
             </div>-->
             <!-- edit_user_job.html -->
             <!-- ... your existing HTML code ... -->
-            <div class="container">
+            <div class="container" style="background-color: rgba(255, 255, 255, 0.5);">                
                 <h2>View Selected Jobs</h2>
         
                 {% for job in user_selected_jobs %}
@@ -392,8 +307,16 @@
                         <p><strong>Job Title:</strong> {{ job.job.title }}</p>
                         <p><strong>Start Date:</strong> {{ job.start_date }}</p>
                         <p><strong>End Date:</strong> {{ job.end_date }}</p>
-                        <p><strong>Status</strong> {{ job.status }}</p>
-                        <a href="{% url 'edit_select_user_job' job.id %}" class="btn btn-warning">Edit</a>
+                        <p><strong>Status:</strong> 
+                            {% if job.status == "Approved" %}
+                                <span style="color: green;">{{ job.status }}</span>
+                            {% elif job.status == "Rejected" %}
+                                <span style="color: red;">{{ job.status }}</span>
+                            {% else %}
+                                <span style="color: yellow;">{{ job.status }}</span>
+                            {% endif %}
+                        </p>                        
+                        <a href="{% url 'edit_select_user_job' job.id %}" class="btn btn-success">Edit</a>
                         <a href="{% url 'delete_select_user_job' job.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this job card?')">Delete</a>
                     </div>
                     <hr>

@@ -651,15 +651,29 @@ def member_view_worker_list(request):
 #from django.shortcuts import render
 #from .models import CustomUser  # Replace 'User' with your actual user model
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import CustomUser
+
 def toggle_mentor_status(request):
-    worker_users = CustomUser.objects.filter(user_type='worker')
-    worker_count=worker_users.count()
-    context = {
-                'worker_users': worker_users,
-                'worker_count':worker_count,
-             }  # Assuming 'User' is your user model
-    mentorship_status = {user.id: user.is_mentor for user in worker_users}
-    return render(request, 'toggle_mentor_status.html', context)
+    if request.method == 'POST':
+        try:
+            user_id = request.POST.get('user_id')
+            is_mentor = request.POST.get('is_mentor')  # Get the new mentor status from the request
+            user = CustomUser.objects.get(id=user_id)
+            user.is_mentor = is_mentor
+            user.save()
+            return JsonResponse({'message': f'Mentor status for user {user.username} updated successfully.'})
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'User does not exist.'}, status=404)
+    else:
+        worker_users = CustomUser.objects.filter(user_type='worker')
+        worker_count = worker_users.count()
+        context = {
+            'worker_users': worker_users,
+            'worker_count': worker_count,
+        }
+        return render(request, 'toggle_mentor_status.html', context)
 
 
 '''from django.http import JsonResponse

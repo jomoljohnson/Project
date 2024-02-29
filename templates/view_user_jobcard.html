@@ -11,10 +11,13 @@
                 
                         body {
                             font-family: 'Montserrat', sans-serif;
-                            background-color: #f0f5f9; /* Use your preferred background color */
+                            background-color: #f0f5f9;
                             margin: 0;
                             padding: 0;
-                        }
+                            background-image:url('{% static 'images/bg-01.jpg' %}');
+                            background-size: cover;
+                            background-position: center;
+                                        }
                 
                         /* Header styles */
                         .header {
@@ -91,6 +94,8 @@
                         .container {
                             margin-top: 100px;
                         }
+
+
                     </style>
                 </head>
                 <body>
@@ -123,7 +128,7 @@
                     <!-- Main content -->
                     <div class="content">
                         <!-- Content area -->
-                        <div class="container">
+                        <div class="container" style="background-color: rgba(255, 255, 255, 0.5);">
                             <!--<div class="row">
                                 <div class="col-md-4">
                                     <div class="card">
@@ -188,16 +193,24 @@
                                                     <td>{{ job.applicant_name }}</td>
                                                     <td>{{ job.phone_number }}</td>
                                                     <td>{{ job.email }}</td>
-                                                    <td>{{ job.approval_status}}
+                                                    <td>
+                                                        {% if job.approval_status == "Approved" %}
+                                                            <span style="color: green;">{{ job.approval_status }}</span>
+                                                        {% elif job.approval_status == "rejected" %}
+                                                            <span style="color: red;">{{ job.approval_status }}</span>
+                                                        {% else %}
+                                                            <span style="color: yellow;">{{ job.approval_status }}</span>
+                                                        {% endif %}
+                                                    </td>
                                                     <td>{{ job.job_card_number }}</td>
-                                                    <td><a href="{% url 'edit_application' job.id %}">Edit</a></td>
-                                                    <td><a href="{% url 'delete_job_card' job.id %}">Delete</a></td> 
+                                                    <td><a href="{% url 'edit_application' job.id %}" class="btn btn-success">Edit</a></td>
+                                                    <td><a href="{% url 'delete_job_card' job.id %}" class="btn btn-danger">Delete</a></td> 
                                                     <!-- Add more table data cells as needed -->
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                    <input type="button" value="Print Form" onclick="printForm()" class="download-button">
+                                    <input type="button" value="Print Form" onclick="printForm()" class="btn btn-secondary">
                                     <!--<div class="pagination">
                                         <span class="step-links">
                                             {% if worker_users.has_previous %}
