@@ -180,12 +180,12 @@
                                                         {% if job.approval_status in 'Pending' or job.approval_status in 'Approved' or job.approval_status in 'Rejected' %}
                                                             <form action="{% url 'admin_approve_reject' job.id 'approve' %}" method="post" class="approval-form">
                                                                 {% csrf_token %}
-                                                                <button type="submit" class="approval-button">Approve</button>
+                                                                <button type="submit" class="btn btn-success">Approve</button>
                                                             </form>
                                                     
                                                             <form action="{% url 'admin_approve_reject' job.id 'reject' %}" method="post" class="approval-form">
                                                                 {% csrf_token %}
-                                                                <button type="submit" class="approval-button">Reject</button>
+                                                                <button type="submit" class="btn btn-danger">Reject</button>
                                                             </form>
                                                         {% endif %}
                                                     </td>                                                                                                                                                            

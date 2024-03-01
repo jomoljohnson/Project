@@ -1,3 +1,4 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +10,13 @@
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f0f5f9; /* Use your preferred background color */
+            background-color: #f0f5f9;
             margin: 0;
             padding: 0;
-        }
+            background-image:url('{% static 'images/bg-01.jpg' %}');
+            background-size: cover;
+            background-position: center;
+                        }
 
         /* Header styles */
         .header {
@@ -87,16 +91,13 @@
         }
 
         .container {
-            max-width: 800px; /* Increase the max-width to 800px or any value you prefer */
-            margin: 100px auto; /* Center the container horizontally with auto margin */
-        }
-        .container {
-        max-width: 600px;
+        max-width: 700px;
         margin: 0 auto;
         padding: 20px;
         background-color: #f9f9f9;
         border: 1px solid #ddd;
         border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.5);
         }
         h1 {
         text-align: center;
@@ -178,7 +179,7 @@
         <!-- Content area for each feature -->
         <!-- Apply for Thozil Card -->
         <div class="apply-card">
-            <h2 class="page-title">PROFILE</h2>
+            <h2 class="page-title">Approved Jobs</h2>
             <div class="card-body">
                 <i class="fa fa-pen fa-xs edit"></i>
                 <table>
@@ -206,8 +207,8 @@
                                         <input type="hidden" name="job_id" value="{{ job.id }}">
                                         <input type="hidden" name="job_title" value="{{ job.job.title }}"> <!-- Assuming 'job' has a ForeignKey to 'Job' model -->
                                         <input type="hidden" name="worker_id" value="{{ worker.id }}">
-                                        <button type="submit" name="action" value="accept">Accept</button>
-                                        <button type="submit" name="action" value="reject">Reject</button>
+                                        <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
+                                        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
                                     </form>
                                     
                                     

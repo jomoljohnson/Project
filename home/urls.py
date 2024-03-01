@@ -47,7 +47,7 @@ urlpatterns = [
 
 
     path('toggle_mentor_status', views.toggle_mentor_status, name='toggle_mentor_status'),    
-    path('add_mentor/<int:worker_id>/', views.add_mentor, name='add_mentor'),
+    path('add_remove_mentor<int:user_id>', views.add_remove_mentor, name='add_remove_mentor'),
     path('remove_mentor/<int:worker_id>/', views.remove_mentor, name='remove_mentor'),
     path('submit-job-card', views.submit_job_card, name='submit_job_card'),
 

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -10,10 +11,13 @@
                 
                         body {
                             font-family: 'Montserrat', sans-serif;
-                            background-color: #f0f5f9; /* Use your preferred background color */
+                            background-color: #f0f5f9;
                             margin: 0;
                             padding: 0;
-                        }
+                            background-image:url('{% static 'images/bg-01.jpg' %}');
+                            background-size: cover;
+                            background-position: center;
+                                        }
                 
                         /* Header styles */
                         .header {
@@ -90,6 +94,10 @@
                         .container {
                             margin-top: 100px;
                         }
+                        .disabled {
+                            opacity: 0.5;
+                            cursor: not-allowed;
+                        }
                     </style>
                 </head>
                 <body>
@@ -111,316 +119,108 @@
                         <ul>
                             <li><a href="toggle_mentor_status">Add team leader</a></li>
                             <!--<li><a href="#">Choose team leader</a></li>
-                            <li><a href="#">Assing working days</a></li>-->                    
+                            <li><a href="#">Assing working days</a></li>    -->                 
                             <!--<li><a href="view_jobcard">view job Card</a></li>-->
                         </ul>
                     </div>
                     <!-- Main content -->
-                    <!--<div class="content">
+                    <div class="content">
                         <!-- Content area -->
-                        <!-- <div class="container">
+                        <div class="container">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="card">
+                                    <div class="card" style="background-color: rgba(255, 255, 255, 0.5);">
                                         <div class="card-body">
                                             <h5 class="card-title">Total Workers</h5>
                                             <p class="card-text">{{ worker_users.count }}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Total Members</h5>
-                                            <p class="card-text">{{ member_users.count }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Total Regular Users</h5>
-                                            <p class="card-text">{{ regular_users.count }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    <div class="container">
-                        <div id="worker-list">
-                            <!-- User table -->
-                            <!--<h2 class="page-title mt-4">Worker List</h2>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Sl No</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <!--<th>City</th>-->
-                                        <!--<th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    {% for user in worker_users %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ user.username }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <!--<td>{{ user.city }}</td>-->
-                                        <!--<td>
-                                            {% if user.is_active %}
-                                                Active
-                                            {% else %}
-                                                Deactivated
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if user.is_active %}
-                                                    <form method="post" action="{% url 'deactivate_user' user.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-danger">Deactivate</button>
-                                                    </form>
-                                                {% else %}
-                                                    <form method="post" action="{% url 'activate_user' user.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-success">Activate</button>
-                                                    </form>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div class="pagination">
-                                <span class="step-links">
-                                    {% if worker_users.has_previous %}
-                                        <a href="?page=1">&laquo; first</a>
-                                        <a href="?page={{ worker_users.previous_page }}">previous</a>
-                                    {% endif %}
-                                    <span class="current-page">
-                                        Page {{ worker_users.number }} of {{ worker_users.paginator.num_pages }}.
-                                    </span>
-                                    {% if worker_users.has_next %}
-                                        <a href="?page={{ worker_users.next_page }}">next</a>
-                                        <a href="?page={{ worker_users.paginator.num_pages }}">last &raquo;</a>
-                                    {% endif %}
-                                </span>
                             </div>
                         </div>
-                    </div>
-                    <div class="container">
-                        <div id="member-list">
-                            <h2 class="page-title mt-4">Member List</h2>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Sl No</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <!--<th>City</th>-->
-                                        <!--<th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    {% for user in member_users %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ user.username }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <!--<td>{{ user.city }}</td>-->
-                                       <!-- <td>
-                                            {% if user.is_active %}
-                                                Active
-                                            {% else %}
-                                                Deactivated
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if user.is_active %}
-                                                    <form method="post" action="{% url 'deactivate_user' user.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-danger">Deactivate</button>
-                                                    </form>
-                                                {% else %}
-                                                    <form method="post" action="{% url 'activate_user' user.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-success">Activate</button>
-                                                    </form>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div class="pagination">
-                                <span class="step-links">
-                                    {% if member_users.has_previous %}
-                                        <a href="?page=1">&laquo; first</a>
-                                        <a href="?page={{ member_users.previous_page }}">previous</a>
-                                    {% endif %}
-                                    <span class="current-page">
-                                        Page {{ member_users.number }} of {{ worker_users.paginator.num_pages }}.
-                                    </span>
-                                    {% if worker_users.has_next %}
-                                        <a href="?page={{ member_users.next_page }}">next</a>
-                                        <a href="?page={{ member_users.paginator.num_pages }}">last &raquo;</a>
-                                    {% endif %}
-                                </span>
+                            <div class="container" style="background-color: rgba(255, 255, 255, 0.5);">
+                                <div id="worker-list">
+                                    <!-- User table -->
+                                    <h2 class="page-title mt-4">Worker List</h2>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl No</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for user in worker_users %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td>{{ user.username }}</td>
+                                                    <td>{{ user.email }}</td>
+                                                    <td>
+                                                        {% if user.is_mentor %}
+                                                            Mentor
+                                                        {% else %}
+                                                            Not a Mentor
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <form method="post" action="{% url 'add_remove_mentor' user.id %}">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn {% if user.is_mentor %}btn-danger{% else %}btn-success{% endif %}" 
+                                                                    {% if mentor_user %}
+                                                                        {% if user != mentor_user %}
+                                                                            {% if not user.is_mentor %}
+                                                                                disabled
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                            >
+                                                                {% if user.is_mentor %}
+                                                                    Remove 
+                                                                {% else %}
+                                                                    Add as Mentor
+                                                                {% endif %}
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                                                                
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div id="regular-list">
-                            <h2 class="page-title mt-4">User List</h2>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Sl No</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <!--<th>City</th>-->
-                                        <!--<th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    {% for user in regular_users %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ user.username }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <!--<td>{{ user.city }}</td>-->
-                                        <!--<td>
-                                            {% if user.is_active %}
-                                                Active
-                                            {% else %}
-                                                Deactivated
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if user.is_active %}
-                                                    <form method="post" action="{% url 'deactivate_user' user.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-danger">Deactivate</button>
-                                                    </form>
-                                                {% else %}
-                                                    <form method="post" action="{% url 'activate_user' user.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-success">Activate</button>
-                                                    </form>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div class="pagination">
-                                <span class="step-links">
-                                  {% if regular_users.has_previous %}
-                                    <a href="?page=1">&laquo; first</a>
-                                    <a href="?page={{ regular_users.previous_page_number }}">previous</a>
-                                  {% endif %}
-                              
-                                  <span class="current-page">Page {{ regular_users.number }} of {{ regular_users.paginator.num_pages }}.</span>
-                              
-                                  {% if regular_users.has_next %}
-                                    <a href="?page={{ regular_users.next_page_number }}">next</a>
-                                    <a href="?page={{ regular_users.paginator.num_pages }}">last &raquo;</a>
-                                  {% endif %}
-                                </span>
-                              </div>
-                              
-                              
-                              
-                              
-                    </div>
-                    <!-- Include jQuery -->
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-                    <script>
-                        $(document).ready(function () {
-                            // Function to fetch and display user data
-                            function fetchAndDisplayUsers(userType) {
-                                $.ajax({
-                                    type: "GET",
-                                    url: `/get_${userType}_users/`, // Replace with your Django endpoint
-                                    dataType: "json",
-                                    success: function (data) {
-                                        displayUsersData(data, userType);
-                                    },
-                                    error: function (xhr, status, error) {
-                                        console.error(`Error fetching ${userType} user data:`, error);
-                                    }
-                                });
-                            }
-                    
-                            // Function to display user data in the content section
-                            function displayUsersData(data, userType) {
-                                // Clear the existing data in the content section
-                                $(`#${userType}-list`).empty();
-                    
-                                // Display the fetched user data
-                                if (data.length > 0) {
-                                    var table = $("<table>");
-                                    table.addClass("table"); // Apply Bootstrap table styles if needed
-                    
-                                    // Create the table headers
-                                    var headerRow = $("<tr>");
-                                    headerRow.append("<th>Sl No</th>");
-                                    headerRow.append("<th>Username</th>");
-                                    headerRow.append("<th>Email</th>");
-                                    headerRow.append("<th>Status</th>");
-                                    headerRow.append("<th>Action</th>");
-                                    table.append(headerRow);
-                    
-                                    // Populate the table with user data
-                                    $.each(data, function (index, user) {
-                                        var row = $("<tr>");
-                                        row.append(`<td>${user.id}</td>`);
-                                        row.append(`<td>${user.username}</td>`);
-                                        row.append(`<td>${user.email}</td>`);
-                                        row.append(user.is_active
-                                            ? `<td>Active</td>`
-                                            : `<td>Deactivated</td>`
-                                        );
-                                       
-                                        table.append(row);
+                            <script>
+                                function toggleMentor(userId, isMentor) {
+                                    // Toggle mentor status locally
+                                    var allButtons = document.querySelectorAll('.add-mentor-button');
+                                    allButtons.forEach(function(button) {
+                                        button.disabled = true; // Disable all buttons first
                                     });
-                    
-                                    // Append the table to the content section
-                                    $(`#${userType}-list`).append(table);
-                                } else {
-                                    // Handle the case where no data was returned
-                                    $(`#${userType}-list`).text(`No ${userType} user data available.`);
+                                    event.target.disabled = true; // Disable the clicked button
+                                    
+                                    // Send AJAX request to update mentor status
+                                    $.ajax({
+                                        type: "POST",
+                                        url: `/toggle_mentor_status/${userId}/`,
+                                        data: {
+                                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                                            is_mentor: !isMentor
+                                        },
+                                        dataType: "json",
+                                        success: function(data) {
+                                            console.log(data.message);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error('Error toggling mentor status:', error);
+                                        }
+                                    });
                                 }
-                            }
-                    
-                            // Attach click event listeners to the sidebar buttons
-                            $("#fetchMemberUsersButton").on("click", function () {
-                                fetchAndDisplayUsers("member");
-                            });
-                    
-                            $("#fetchWorkerUsersButton").on("click", function () {
-                                fetchAndDisplayUsers("worker");
-                            });
-                    
-                            $("#fetchRegularUsersButton").on("click", function () {
-                                fetchAndDisplayUsers("regular");
-                            });
-                    
-                            // Show the default content (e.g., Dashboard) when the page loads
-                            $("#dashboard-content").show();
-                        });
-                    </script>
-                    
-
-                    
-    
-
+                            </script>
+                            
+                                
                     <!-- Include Bootstrap JS -->
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

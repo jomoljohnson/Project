@@ -9,10 +9,13 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-                            font-family: 'Montserrat', sans-serif;
-                            background-color: #f0f5f9; /* Use your preferred background color */
-                            margin: 0;
-                            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f5f9;
+            margin: 0;
+            padding: 0;
+            background-image:url('{% static 'images/bg-01.jpg' %}');
+            background-size: cover;
+            background-position: center;
                         }
                 
                         /* Header styles */
@@ -91,97 +94,6 @@
                             margin-top: 100px;
                         }
 
-        /* New styles for user-specific features */
-        /* Apply for Thozil Card styles */
-        /* Apply for Thozil Card styles */
-.apply-card-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-card-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Working days selection styles */
-.working-days-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.working-days-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Notification styles */
-.notifications-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.notifications-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Complaints styles */
-.complaints-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.complaints-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Application for Work styles */
-.apply-work-button {
-    background-color: #ff0066;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.apply-work-button:hover {
-    background-color: #ff3399; /* Change the hover background color */
-}
-
-/* Customized Working Place styles */
-.customized-place-button {
-    background-color: #F5F5F5;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.customized-place-button:hover {
-    background-color: #cccccc; /* Change the hover background color */
-}
 /* Sidebar styles */
                         .sidebar {
                             height: 100%;
@@ -214,12 +126,12 @@
                             background-color: #555; /* Use your preferred hover background color */
          }
          .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
+            background-color: #fff;
             padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
             border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
@@ -276,33 +188,33 @@
                     </div>
 
     <!-- Main content -->
-    <div class="container">
+    <div class="container" style="background-color: rgba(255, 255, 255, 0.5);">
         <h1>Edit Profile</h1>
         <form class="profile-form" method="post" action="{% url 'worker_profile' %}" onsubmit="return validateForm()">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" name="username" id="username" value="{{ user.username }}" required>
+                <input type="text" name="username" id="username" value="{{ user.username }}" required style="background-color: rgba(255, 255, 255, 0.5);">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" name="email" id="email" value="{{ user.email }}" required>
+                <input type="email" name="email" id="email" value="{{ user.email }}" required style="background-color: rgba(255, 255, 255, 0.5);">
             </div>
             <div class="form-group">
                 <label for="first_name">First Name:</label>
-                <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
+                <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required style="background-color: rgba(255, 255, 255, 0.5);">
             </div>
             <div class="form-group">
                 <label for="last_name">Last Name:</label>
-                <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" required>
+                <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" required style="background-color: rgba(255, 255, 255, 0.5);"
             </div>
             <div class="form-group">
                 <label for="panchayath_name">Panchayath Name:</label>
-                <input type="text" name="panchayath_name" id="panchayath_name" value="{{ user.panchayath_name }}" required>
+                <input type="text" name="panchayath_name" id="panchayath_name" value="{{ user.panchayath_name }}" required style="background-color: rgba(255, 255, 255, 0.5);">
             </div>
             <div class="form-group">
                 <label for="ward_number">Ward Number:</label>
-                <input type="text" name="ward_number" id="ward_number" value="{{ user.ward_number }}" required>
+                <input type="text" name="ward_number" id="ward_number" value="{{ user.ward_number }}" required style="background-color: rgba(255, 255, 255, 0.5);">
             </div>
             <button type="submit">Save Changes</button>
         </form>

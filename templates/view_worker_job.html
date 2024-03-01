@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +10,13 @@
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f0f5f9; /* Use your preferred background color */
+            background-color: #f0f5f9;
             margin: 0;
             padding: 0;
-        }
+            background-image:url('{% static 'images/bg-01.jpg' %}');
+            background-size: cover;
+            background-position: center;
+                        }
 
         /* Header styles */
         .header {
@@ -87,16 +91,14 @@
         }
 
         .container {
-            max-width: 800px; /* Increase the max-width to 800px or any value you prefer */
-            margin: 100px auto; /* Center the container horizontally with auto margin */
-        }
-        .container {
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
         background-color: #f9f9f9;
         border: 1px solid #ddd;
         border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.5);
+
         }
         h1 {
         text-align: center;

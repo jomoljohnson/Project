@@ -66,7 +66,14 @@ def dashworker(request):
 @login_required(login_url='login')
 def dashmember(request):
     if 'username' in request.session:
-        response = render(request,"dashmember.html")
+        worker_users = CustomUser.objects.filter(user_type='worker')
+        mentor_user = CustomUser.objects.filter(is_mentor=True, user_type='worker').first()
+    
+        context = {
+            'worker_users': worker_users,
+            'mentor_user': mentor_user
+        }
+        response = render(request,"dashmember.html",context)
         response['Cache-Control'] = 'no-store,must-revalidate'
         return response
     else:
@@ -654,26 +661,36 @@ def member_view_worker_list(request):
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import CustomUser
-
+@never_cache
+@login_required(login_url='login')
 def toggle_mentor_status(request):
+     # Get all worker users
+    worker_users = CustomUser.objects.filter(user_type='worker')
+    mentor_user = CustomUser.objects.filter(is_mentor=True, user_type='worker').first()
+    
+    context = {
+        'worker_users': worker_users,
+        'mentor_user': mentor_user
+    }
+    return render(request, 'toggle_mentor_status.html', context)
+
+
+
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import CustomUser  # Assuming you have a CustomUser model
+from django.contrib.auth.decorators import login_required
+@never_cache
+@login_required(login_url='login')
+def add_remove_mentor(request, user_id):
     if request.method == 'POST':
-        try:
-            user_id = request.POST.get('user_id')
-            is_mentor = request.POST.get('is_mentor')  # Get the new mentor status from the request
-            user = CustomUser.objects.get(id=user_id)
-            user.is_mentor = is_mentor
-            user.save()
-            return JsonResponse({'message': f'Mentor status for user {user.username} updated successfully.'})
-        except CustomUser.DoesNotExist:
-            return JsonResponse({'error': 'User does not exist.'}, status=404)
+        user = get_object_or_404(CustomUser, id=user_id)
+        is_mentor = not user.is_mentor  # Toggle the mentor status
+        user.is_mentor = is_mentor
+        user.save()
+        return redirect('toggle_mentor_status')  # Redirect after toggling mentor status
     else:
-        worker_users = CustomUser.objects.filter(user_type='worker')
-        worker_count = worker_users.count()
-        context = {
-            'worker_users': worker_users,
-            'worker_count': worker_count,
-        }
-        return render(request, 'toggle_mentor_status.html', context)
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
 
 '''from django.http import JsonResponse

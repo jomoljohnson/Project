@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -10,10 +11,13 @@
                 
                         body {
                             font-family: 'Montserrat', sans-serif;
-                            background-color: #f0f5f9; /* Use your preferred background color */
+                            background-color: #f0f5f9;
                             margin: 0;
                             padding: 0;
-                        }
+                            background-image:url('{% static 'images/bg-01.jpg' %}');
+                            background-size: cover;
+                            background-position: center;
+                                        }
                 
                         /* Header styles */
                         .header {
@@ -125,7 +129,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="card">
+                                    <div class="card" style="background-color: rgba(255, 255, 255, 0.5);">
                                         <div class="card-body">
                                             <h5 class="card-title">Total Workers</h5>
                                             <p class="card-text">{{ worker_users.count }}</p>
@@ -133,7 +137,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container">
+                        </div>
+                            <div class="container" style="background-color: rgba(255, 255, 255, 0.5);">
                                 <div id="worker-list">
                                     <!-- User table -->
                                     <h2 class="page-title mt-4">Worker List</h2>
@@ -161,14 +166,26 @@
                                                         {% endif %}
                                                     </td>
                                                     <td>
-                                                        <button onclick="toggleMentor('{{ user.id }}', this)" {% if user.is_mentor %}disabled{% endif %}>
-                                                            {% if user.is_mentor %}
-                                                                Remove Mentor
-                                                            {% else %}
-                                                                Add Mentor
-                                                            {% endif %}
-                                                        </button>
-                                                    </td>                                                 
+                                                        <form method="post" action="{% url 'add_remove_mentor' user.id %}">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn {% if user.is_mentor %}btn-danger{% else %}btn-success{% endif %}" 
+                                                                    {% if mentor_user %}
+                                                                        {% if user != mentor_user %}
+                                                                            {% if not user.is_mentor %}
+                                                                                disabled
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                            >
+                                                                {% if user.is_mentor %}
+                                                                    Remove 
+                                                                {% else %}
+                                                                    Add as Mentor
+                                                                {% endif %}
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                                                                
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
