@@ -64,7 +64,7 @@ urlpatterns = [
     path('complaints',views.complaints,name='complaints'),
     path('admin_complaints',views.admin_complaints,name='admin_complaints'),
     path('admin_response<int:complaint_id>',views.admin_response,name='admin_response'),
-    path('accepted_jobs<int:notification_id>', views.accepted_jobs, name='accepted_jobs'),
+    #path('accepted_jobs<int:notification_id>', views.accepted_jobs, name='accepted_jobs'),
     path('view_worker_job',views.view_worker_job,name='view_worker_job'),
 
 

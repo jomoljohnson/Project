@@ -205,11 +205,12 @@
                                     <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="job_id" value="{{ job.id }}">
-                                        <input type="hidden" name="job_title" value="{{ job.job.title }}"> <!-- Assuming 'job' has a ForeignKey to 'Job' model -->
                                         <input type="hidden" name="worker_id" value="{{ worker.id }}">
+                                        <input type="hidden" name="job_title" value="{{ job.job.title }}">
                                         <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
                                         <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
                                     </form>
+                                    
                                     
                                     
                                 </td>

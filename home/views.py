@@ -1009,6 +1009,9 @@ def get_member_users(request):
 
     return JsonResponse(member_data, safe=False)
 
+
+
+
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import Notification, UserSelectedJob, JobAccepted
@@ -1043,10 +1046,11 @@ def worker_jobs(request):
                 job_title=job_title,
                 content=f"Job '{job_title}' has been accepted by worker '{request.user.username}'.",
                 total_work=total_work,
-                applied_by=selected_job.user.username  # Storing the username of the job applicant
+                applied_by=selected_job.user.username,  # Storing the username of the job applicant
+                is_accepted=True
             )
 
-            # Remove the accepted job from the list of approved jobs
+            # After accepting the job, remove it from the list of approved jobs
             approved_jobs = UserSelectedJob.objects.filter(status='Approved').exclude(id=job_id)
 
         elif action == 'reject':
@@ -1070,11 +1074,13 @@ def worker_jobs(request):
         return redirect('worker_jobs')
     else:
         # If it's not a POST request, continue with normal rendering of the jobs page
-        approved_jobs = UserSelectedJob.objects.filter(status='Approved')
+
+        # Filter approved jobs excluding those already accepted by the current user
+        accepted_job_ids = JobAccepted.objects.filter(worker=request.user, is_accepted=True).values_list('id', flat=True)
+        approved_jobs = UserSelectedJob.objects.filter(status='Approved').exclude(id__in=accepted_job_ids)
+
         notifications = Notification.objects.filter(user=request.user)
         return render(request, 'worker_jobs.html', {'approved_jobs': approved_jobs, 'notifications': notifications})
-
-
 
 
 from django.shortcuts import render, redirect
@@ -1143,37 +1149,37 @@ def admin_response(request, complaint_id):
 
 
 
-from django.shortcuts import render, redirect
-from .models import JobAccepted
-def accepted_jobs(request):
-    if request.method == 'POST':
-        job_id = request.POST.get('job_id')
-        worker_id = request.POST.get('worker_id')
-        action = request.POST.get('action')
-
-        if action == 'accept':
-            # Retrieve job details from the database
-            job = Job.objects.get(pk=job_id)
-            worker = CustomUser.objects.get(pk=worker_id)
-            
-            # Create AcceptedJob entry
-            accepted_job = JobAccepted.objects.create(
-                worker=worker,
-                job=job,
-                is_accepted=True,
-                total_working_days=0  # Initialize total_working_days to 0
-            )
-            accepted_job.save()
-        elif action == 'reject':
-            # Implement rejection logic if needed
-            pass
-
-        # Redirect back to the worker jobs page
-        return redirect('worker_jobs')
-    else:
-        approved_jobs = JobAccepted.objects.filter(is_accepted=True)
-        context = {'approved_jobs': approved_jobs}
-        return render(request, 'worker_jobs.html', context)
+#from django.shortcuts import render, redirect
+#from .models import JobAccepted
+#def accepted_jobs(request):
+#    if request.method == 'POST':
+#        job_id = request.POST.get('job_id')
+#        worker_id = request.POST.get('worker_id')
+#        action = request.POST.get('action')
+#
+#       if action == 'accept':
+#            # Retrieve job details from the database
+#            job = Job.objects.get(pk=job_id)
+#           worker = CustomUser.objects.get(pk=worker_id)
+#            
+#            # Create AcceptedJob entry
+#            accepted_job = JobAccepted.objects.create(
+#                worker=worker,
+#                job=job,
+#                is_accepted=True,
+#                total_working_days=0  # Initialize total_working_days to 0
+#            )
+#            accepted_job.save()
+#       elif action == 'reject':
+#            # Implement rejection logic if needed
+#           pass
+#
+#       # Redirect back to the worker jobs page
+#        return redirect('worker_jobs')
+#    else:
+#        approved_jobs = JobAccepted.objects.filter(is_accepted=True)
+#        context = {'approved_jobs': approved_jobs}
+#       return render(request, 'worker_jobs.html', context)
 
 
 
