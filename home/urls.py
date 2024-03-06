@@ -68,11 +68,15 @@ urlpatterns = [
     path('view_worker_job',views.view_worker_job,name='view_worker_job'),
 
 
-    
+
+    path('upload_image', views.upload_image, name='upload_image'),
+    path('delete_image<int:image_id>', views.delete_image, name='delete_image'),
+
+
+    path('delete_job/<int:job_id>/', views.delete_job, name='delete_job'),
     path('add_jobs', views.add_jobs, name="add_jobs"),
     path('view_add_job',views.view_add_job,name="view_add_job"),
     path('edit_job<int:job_id>', views.edit_job, name='edit_job'),
-    path('delete_job/<int:job_id>/', views.delete_job, name='delete_job'),
 
 
 

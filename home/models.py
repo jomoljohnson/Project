@@ -143,3 +143,10 @@ class JobAccepted(models.Model):
 
     def __str__(self):
         return f"{self.worker.username} - {self.job_title}"
+    
+
+
+class UploadedImage(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='uploaded_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)

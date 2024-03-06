@@ -1193,3 +1193,39 @@ def view_worker_job(request):
     ).distinct()
     context = {'accepted_jobs': accepted_jobs}
     return render(request, 'view_worker_job.html', context)
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import UploadedImage
+
+@login_required
+def upload_image(request):
+    if request.method == 'POST':
+        # Assuming you have a CustomUser model and the user is authenticated
+        user = request.user
+        image_file = request.FILES.get('image')
+        # Create and save the UploadedImage instance with the user set
+        uploaded_image = UploadedImage.objects.create(user=user, image=image_file)
+        # Redirect to the same page or any other page as needed
+        return redirect('upload_image')
+    
+    # Retrieve all uploaded images from the database
+    images = UploadedImage.objects.all()
+    
+    # Pass the images and other necessary data to the template
+    return render(request, 'upload_image.html', {'images': images})
+
+
+
+@login_required
+def delete_image(request, image_id):
+    # Retrieve the uploaded image instance
+    image = get_object_or_404(UploadedImage, id=image_id)
+    # Ensure that the user owns the image before deletion
+    if image.user == request.user:
+        # Delete the image
+        image.delete()
+    # Redirect back to the upload_image view
+    return redirect('upload_image')
