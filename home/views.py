@@ -1018,69 +1018,68 @@ from .models import Notification, UserSelectedJob, JobAccepted
 
 @login_required(login_url='login')
 def worker_jobs(request):
-    if request.method == 'POST':
-        job_id = request.POST.get('job_id')
-        job_title = request.POST.get('job_title')
-        action = request.POST.get('action')
+    # Get IDs of accepted jobs by the current user
+    accepted_job_ids = JobAccepted.objects.filter(worker=request.user, is_accepted=True).values_list('job_title', flat=True)
 
-        if action == 'accept':
-            # Get the UserSelectedJob instance
-            selected_job = UserSelectedJob.objects.get(id=job_id)
+    # Filter approved jobs excluding those already accepted by the current user
+    approved_jobs = UserSelectedJob.objects.filter(status='Approved').exclude(id__in=accepted_job_ids)
 
-            # Perform actions when job is accepted
-            # For example, update the database or send notifications
-            # Update the job status or any other relevant action
+    notifications = Notification.objects.filter(user=request.user)
+    return render(request, 'worker_jobs.html', {'approved_jobs': approved_jobs, 'notifications': notifications})
 
-            # Create a notification for the user
-            Notification.objects.create(
-                user=request.user,
-                content=f"Job '{job_title}' has been accepted by worker '{request.user.username}'."
-            )
 
-            # Calculate total work based on start and end dates
-            total_work = (selected_job.end_date - selected_job.start_date).days
 
-            # Create an instance of AcceptedJob
-            JobAccepted.objects.create(
-                worker=request.user,
-                job_title=job_title,
-                content=f"Job '{job_title}' has been accepted by worker '{request.user.username}'.",
-                total_work=total_work,
-                applied_by=selected_job.user.username,  # Storing the username of the job applicant
-                is_accepted=True
-            )
+@login_required(login_url='login')
+def accept_job(request, job_id):
+    # Get the UserSelectedJob instance
+    selected_job = UserSelectedJob.objects.get(id=job_id)
 
-            # After accepting the job, remove it from the list of approved jobs
-            approved_jobs = UserSelectedJob.objects.filter(status='Approved').exclude(id=job_id)
+    # Perform actions when job is accepted
+    # For example, update the database or send notifications
+    # Update the job status or any other relevant action
 
-        elif action == 'reject':
-            # Get the UserSelectedJob instance
-            selected_job = UserSelectedJob.objects.get(id=job_id)
+    # Create a notification for the user
+    Notification.objects.create(
+        user=request.user,
+        content=f"Job '{selected_job.title}' has been accepted by worker '{request.user.username}'."
+    )
 
-            # Perform actions when job is rejected
-            # For example, update the database or send notifications
-            # Update the job status or any other relevant action
+    # Calculate total work based on start and end dates
+    total_work = (selected_job.end_date - selected_job.start_date).days
 
-            # Create a notification for the user
-            Notification.objects.create(
-                user=request.user,
-                content=f"Job '{job_title}' has been rejected by worker '{request.user.username}'."
-            )
+    # Create an instance of AcceptedJob
+    JobAccepted.objects.create(
+        worker=request.user,
+        job_title=selected_job.title,
+        content=f"Job '{selected_job.title}' has been accepted by worker '{request.user.username}'.",
+        total_work=total_work,
+        applied_by=selected_job.user.username,  # Storing the username of the job applicant
+        is_accepted=True
+    )
 
-            # Continue to show the remaining approved jobs
-            approved_jobs = UserSelectedJob.objects.filter(status='Approved').exclude(id=job_id)
+    # Redirect the user back to the jobs page
+    return redirect('worker_jobs')
 
-        # After processing the form, redirect the user back to the jobs page or any other desired page
-        return redirect('worker_jobs')
-    else:
-        # If it's not a POST request, continue with normal rendering of the jobs page
 
-        # Filter approved jobs excluding those already accepted by the current user
-        accepted_job_ids = JobAccepted.objects.filter(worker=request.user, is_accepted=True).values_list('id', flat=True)
-        approved_jobs = UserSelectedJob.objects.filter(status='Approved').exclude(id__in=accepted_job_ids)
 
-        notifications = Notification.objects.filter(user=request.user)
-        return render(request, 'worker_jobs.html', {'approved_jobs': approved_jobs, 'notifications': notifications})
+@login_required(login_url='login')
+def reject_job(request, job_id):
+    # Get the UserSelectedJob instance
+    selected_job = UserSelectedJob.objects.get(id=job_id)
+
+    # Perform actions when job is rejected
+    # For example, update the database or send notifications
+    # Update the job status or any other relevant action
+
+    # Create a notification for the user
+    Notification.objects.create(
+        user=request.user,
+        content=f"Job '{selected_job.title}' has been rejected by worker '{request.user.username}'."
+    )
+
+    # Redirect the user back to the jobs page
+    return redirect('worker_jobs')
+
 
 
 from django.shortcuts import render, redirect
