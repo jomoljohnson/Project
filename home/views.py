@@ -1228,3 +1228,25 @@ def delete_image(request, image_id):
         image.delete()
     # Redirect back to the upload_image view
     return redirect('upload_image')
+
+
+from django.shortcuts import render, redirect
+from .models import JobAccepted, Attendance
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url='login')
+def add_attendance(request):
+    if request.method == 'GET' and request.user.is_mentor:
+        # Retrieve job assignments and attendance records
+        job_assignments = JobAccepted.objects.all()
+        attendance_records = Attendance.objects.all()
+        
+        # Pass job assignments and attendance records to the template
+        context = {
+            'job_assignments': job_assignments,
+            'attendance_records': attendance_records
+        }
+        
+        return render(request, 'add_attendance.html', context)
+    else:
+        return redirect('add_attendance')  # Redirect to a default page if the conditions are not met

@@ -150,3 +150,9 @@ class UploadedImage(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='uploaded_images/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+
+class Attendance(models.Model):
+    worker = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    work_date = models.DateField()
+    is_present = models.BooleanField(default=False)

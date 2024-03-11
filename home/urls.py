@@ -85,6 +85,7 @@ urlpatterns = [
     path('add_member',views.add_member,name="add_member"),
 
 
+    path('add_attendance',views.add_attendance,name='add_attendance'),
 
 
     path('admin_view_user_job', views.admin_view_user_job, name='admin_view_user_job'),

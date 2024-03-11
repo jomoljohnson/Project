@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management</title>
+</head>
+<body>
+    <h1>Attendance Management</h1>
+
+    <h2>Job Assignments:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Worker</th>
+                <th>Work Site</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for assignment in job_assignments %}
+            <tr>
+                <td>{{ assignment.worker.username }}</td>
+                <td>{{ assignment.work_site.name }}</td>
+                <td>{{ assignment.start_date }}</td>
+                <td>{{ assignment.end_date }}</td>
+                <td>
+                    <form method="post" action="#">
+                        {% csrf_token %}
+                        <input type="hidden" name="work_date" value="{{ assignment.start_date }}">
+                        <button type="submit">Add Attendance</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
