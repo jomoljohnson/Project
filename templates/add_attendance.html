@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Management</title>
+    <title>Add Attendance</title>
 </head>
 <body>
-    <h1>Attendance Management</h1>
+    <h1>Add Attendance</h1>
 
     <h2>Job Assignments:</h2>
     <table>
@@ -16,7 +16,7 @@
                 <th>Work Site</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>Action</th>
+                <th>Attendance</th>
             </tr>
         </thead>
         <tbody>
@@ -27,11 +27,11 @@
                 <td>{{ assignment.start_date }}</td>
                 <td>{{ assignment.end_date }}</td>
                 <td>
-                    <form method="post" action="#">
-                        {% csrf_token %}
-                        <input type="hidden" name="work_date" value="{{ assignment.start_date }}">
-                        <button type="submit">Add Attendance</button>
-                    </form>
+                    {% for attendance in attendance_records %}
+                        {% if attendance.worker == assignment.worker and attendance.work_date == assignment.start_date %}
+                            {{ attendance.is_present }}
+                        {% endif %}
+                    {% endfor %}
                 </td>
             </tr>
             {% endfor %}
