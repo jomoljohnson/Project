@@ -1034,9 +1034,15 @@ def accept_job(request, job_id):
     # Get the UserSelectedJob instance
     selected_job = UserSelectedJob.objects.get(id=job_id)
 
-    # Perform actions when job is accepted
-    # For example, update the database or send notifications
-    # Update the job status or any other relevant action
+    # Check if the job has already been accepted
+    if JobAccepted.objects.filter(job_title=selected_job.title, worker=request.user).exists():
+        # If the job is already accepted, redirect to the jobs page with a message
+        messages.error(request, f"Job '{selected_job.title}' has already been accepted.")
+        return redirect('worker_jobs')
+
+    # Update the job status to 'Accepted'
+    selected_job.status = 'Accepted'
+    selected_job.save()
 
     # Create a notification for the user
     Notification.objects.create(
@@ -1047,7 +1053,7 @@ def accept_job(request, job_id):
     # Calculate total work based on start and end dates
     total_work = (selected_job.end_date - selected_job.start_date).days
 
-    # Create an instance of AcceptedJob
+    # Create an instance of JobAccepted
     JobAccepted.objects.create(
         worker=request.user,
         job_title=selected_job.title,
@@ -1062,14 +1068,15 @@ def accept_job(request, job_id):
 
 
 
+
 @login_required(login_url='login')
 def reject_job(request, job_id):
     # Get the UserSelectedJob instance
     selected_job = UserSelectedJob.objects.get(id=job_id)
 
-    # Perform actions when job is rejected
-    # For example, update the database or send notifications
-    # Update the job status or any other relevant action
+    # Update the job status to 'Rejected'
+    selected_job.status = 'Rejected'
+    selected_job.save()
 
     # Create a notification for the user
     Notification.objects.create(
@@ -1079,6 +1086,7 @@ def reject_job(request, job_id):
 
     # Redirect the user back to the jobs page
     return redirect('worker_jobs')
+
 
 
 
@@ -1250,3 +1258,6 @@ def add_attendance(request):
         return render(request, 'add_attendance.html', context)
     else:
         return redirect('add_attendance')  # Redirect to a default page if the conditions are not met
+
+
+
