@@ -186,6 +186,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Sl No.</th>
                             <th>Job Title</th>
                             <th>Applied By</th>
                             <th>Total Work Days</th>
@@ -194,6 +195,7 @@
                     <tbody>
                         {% for job in accepted_jobs %}
                             <tr>
+                                <td>{{ forloop.counter}}</td>
                                 <td>{{ job.job_title }}</td>
                                 <td>{{ job.applied_by }}</td>
                                 <td>{{ job.total_work }}</td>

@@ -61,8 +61,8 @@ urlpatterns = [
     path('delete_select_user_job/<int:job_id>/', views.delete_select_user_job, name='delete_select_user_job'),   
     path('member_approve_reject/<int:user_selected_job_id>/<str:status>/',views. member_approve_reject, name='member_approve_reject'),
     path('worker_jobs',views.worker_jobs, name='worker_jobs'),
-    path('accept_job<int:job_id>', views.accept_job, name='accept_job'),
-    path('reject_job<int:job_id>', views.reject_job, name='reject_job'),
+    #path('accept_job<int:job_id>', views.accept_job, name='accept_job'),
+    #path('reject_job<int:job_id>', views.reject_job, name='reject_job'),
     path('complaints',views.complaints,name='complaints'),
     path('admin_complaints',views.admin_complaints,name='admin_complaints'),
     path('admin_response<int:complaint_id>',views.admin_response,name='admin_response'),
@@ -90,6 +90,10 @@ urlpatterns = [
 
     path('admin_view_user_job', views.admin_view_user_job, name='admin_view_user_job'),
     path('admin_toggle_approval<int:user_job_id>', views.admin_toggle_approval, name='admin_toggle_approval'),
+
+
+    path('member_view_users_jobs',views.member_view_users_jobs,name="member_view_users_jobs"),
+    path('start_work', views.start_work, name='start_work'),
 
     
     #path('accounts/login/', views.login, name='login'),
