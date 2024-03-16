@@ -185,29 +185,46 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Sl.No</th>
                             <th>Worker</th>
                             <th>Work Site</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
+                            <th>Work Applied User</th>
                             <th>Attendance</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for assignment in job_assignments %}
-                        <tr>
-                            <td>{{ assignment.worker.username }}</td>
-                            <td>{{ assignment.work_site.name }}</td>
-                            <td>{{ assignment.start_date }}</td>
-                            <td>{{ assignment.end_date }}</td>
-                            <td>
-                                {% for attendance in attendance_records %}
-                                    {% if attendance.worker == assignment.worker and attendance.work_date == assignment.start_date %}
-                                        {{ attendance.is_present }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endfor %}
+                        <tbody>
+                            <tbody>
+    {% for key, workers in job_assignments.items %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        {% if workers %}
+            <td>{{ workers.0.username }}</td>  <!-- Access the first worker's username -->
+        {% else %}
+            <td>No workers assigned</td> <!-- Display message if no workers are assigned -->
+        {% endif %}
+        <td>{{ key.0 }}</td>  <!-- Access the job title -->
+        <td>{{ key.1 }}</td>  <!-- Access the applied by username -->
+        <!-- You need to adjust the following lines based on your model structure -->
+        {% if workers %}
+            <!--<td>{{ workers.0.job.start_date }}</td>  <!-- Access the start date of the job -->
+            <!--<td>{{ workers.0.job.end_date }}</td>  <!-- Access the end date of the job -->
+            <td>
+                {% if workers.0.is_work_started %}
+                    <a href="#}">Add Attendance</a>
+                {% else %}
+                    Work not started
+                {% endif %}
+            </td>
+        {% else %}
+            <td colspan="3">No workers assigned</td> <!-- Colspan to span across columns -->
+        {% endif %}
+    </tr>
+    {% endfor %}
+</tbody>
+
+                        </tbody>
+                        
                     </tbody>
             </div>
             </div>

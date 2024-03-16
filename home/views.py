@@ -1232,23 +1232,41 @@ def delete_image(request, image_id):
     return redirect('upload_image')
 
 
-from django.shortcuts import render, redirect
-from .models import JobAccepted, Attendance
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from .models import CustomUser, Attendance
 
-@login_required(login_url='login')
 def add_attendance(request):
     if request.method == 'GET' and request.user.is_mentor:
-        # Retrieve job assignments and attendance records
-        job_assignments = JobAccepted.objects.all()
-        attendance_records = Attendance.objects.all()
-        
+        # Retrieve unique job titles and their corresponding applied by usernames
+        job_titles = JobAccepted.objects.values_list('job_title', flat=True).distinct()
+        applied_by_usernames = JobAccepted.objects.values_list('applied_by', flat=True).distinct()
+
+        # Create a dictionary to store job assignments and attendance records
+        job_assignments = {}
+        attendance_records = {}
+
+        # Iterate over unique job titles and applied by usernames
+        for title in job_titles:
+            for username in applied_by_usernames:
+                # Get job accepted instances for the current job title and applied by username
+                job_accepted_instances = JobAccepted.objects.filter(job_title=title, applied_by=username)
+
+                # Aggregate job assignments and attendance records
+                workers = []
+                for job_accepted in job_accepted_instances:
+                    # Retrieve the CustomUser instance based on the username
+                    worker = get_object_or_404(CustomUser, username=job_accepted.worker.username)
+                    workers.append(worker)
+
+                job_assignments[(title, username)] = workers
+                attendance_records[(title, username)] = Attendance.objects.filter(worker__in=workers)
+
         # Pass job assignments and attendance records to the template
         context = {
             'job_assignments': job_assignments,
             'attendance_records': attendance_records
         }
-        
+
         return render(request, 'add_attendance.html', context)
     else:
         return redirect('add_attendance')  # Redirect to a default page if the conditions are not met
@@ -1318,3 +1336,17 @@ def start_work(request):
     else:
         # Handle GET requests (if needed)
         pass
+
+
+
+
+
+def view_started_work(request):
+    # Retrieve JobAccepted instances where work is started
+    started_work = JobAccepted.objects.filter(is_work_started=True)
+
+    context = {
+        'started_work': started_work
+    }
+
+    return render(request, 'started_work.html', context)
