@@ -1315,8 +1315,9 @@ def start_work(request):
         applied_by_username = request.POST.get('applied_by_username')
         
         # Print job title and applied by username for debugging
-        print("Job Title:", job_title)
-        print("Applied By Username:", applied_by_username)
+        #print("Job Title:", job_title)
+
+        #print("Applied By Username:", applied_by_username)
         
         # Get all JobAccepted instances for the specified job title and applied by username
         job_accepted_instances = JobAccepted.objects.filter(
