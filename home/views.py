@@ -1069,7 +1069,7 @@ def worker_jobs(request):
             )
 
         # After processing the form, redirect the user back to the jobs page or any other desired page
-        return redirect('worker_jobs')
+        return redirect('view_worker_job')
 
     else:
         # If it's not a POST request, continue with normal rendering of the jobs page

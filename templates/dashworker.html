@@ -268,12 +268,12 @@
             }
 
                 // Check if the user has not edited their profile
-                {% if not has_edited_profile %}
+                {% comment %} {% if not has_edited_profile %}
                     // Show the profile edit reminder alert on page load
                     window.addEventListener("DOMContentLoaded", function() {
                         alert("Please edit your profile to complete your registration.");
                     });
-                {% endif %}
+                {% endif %} {% endcomment %}
 
         </script>
         
