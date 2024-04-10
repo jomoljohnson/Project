@@ -164,9 +164,16 @@
                                                 <td>
                                                     <form method="post" action="{% url 'admin_toggle_approval' user_job.id %}">
                                                         {% csrf_token %}
-                                                        <button type="submit" class="btn btn-success btn-sm" name="action" value="approve">Approve</button>
-                                                        <button type="submit" class="btn btn-danger btn-sm" name="action" value="reject">Reject</button>
+                                                        {% if user_job.status == 'Pending' %}
+                                                            <button type="submit" class="btn btn-success btn-sm" name="action" value="approve">Approve</button>
+                                                            <button type="submit" class="btn btn-danger btn-sm" name="action" value="reject">Reject</button>
+                                                        {% elif user_job.status == 'Approved' %}
+                                                            <button type="submit" class="btn btn-danger btn-sm" name="action" value="reject">Reject</button>
+                                                        {% else %}
+                                                            <button type="submit" class="btn btn-success btn-sm" name="action" value="approve">Approve</button>
+                                                        {% endif %}
                                                     </form>
+                                                    
                                                 </td>
                                                 
                                             </tr>

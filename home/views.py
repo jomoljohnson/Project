@@ -107,38 +107,33 @@ def registration(request):
 from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import render, redirect
 @never_cache
-def login(request):
+def custom_login(request):
     if request.method == 'POST':
         loginusername = request.POST.get('email')
         password = request.POST.get('password')
 
-        if loginusername == "panchayath01@gmail.com" and password == "Panchayath@123":
-             #For the superuser, redirect to admin_index.html with user list and count
-            return render(request, 'admindashboard.html')
-
-            
-        else:
-            user = authenticate(request, username=loginusername, password=password)
-            if user is not None:
-                auth_login(request, user)
-                request.session['username'] = user.username
-                # Check the user's role and redirect accordingly
-                if user.user_type == 'User':
-                    return redirect('dashuser')
-                elif user.user_type == 'worker':
-                    return redirect('dashworker')
-                elif user.user_type == 'Member':
-                    if not user.is_verified:
-                        error_message = 'Your account is not yet verified. Please wait for admin approval.'
-                        return render(request, 'login.html', {'error_message': error_message})
-                    return redirect('dashmember')
-                else:
-                    return redirect('admindashboard')
-                # Pass the user's first name to the template
-               # return render(request, 'login.html', {'username': user.username})
+        user = authenticate(request, username=loginusername, password=password)
+        if user is not None:
+            auth_login(request, user)
+            request.session['username'] = user.username
+            # Check the user's role and redirect accordingly
+            if user.user_type == 'User':
+                return redirect('dashuser')
+            elif user.user_type == 'worker':
+                return redirect('dashworker')
+            elif user.user_type == 'Member':
+                if not user.is_verified:
+                    error_message = 'Your account is not yet verified. Please wait for admin approval.'
+                    return render(request, 'login.html', {'error_message': error_message})
+                return redirect('dashmember')
             else:
-                error_message = 'Invalid username or password'
-                return render(request, 'login.html', {'error_message': error_message})
+                if user.is_superuser:
+                    return redirect('admindashboard')
+            # Pass the user's first name to the template
+            # return render(request, 'login.html', {'username': user.username})
+        else:
+            error_message = 'Invalid username or password'
+            return render(request, 'login.html', {'error_message': error_message})
 
     response = render(request,"login.html")
     response['Cache-Control'] = 'no-store,must-revalidate'
@@ -248,7 +243,7 @@ def logout(request):
 @login_required
 def admindashboard(request):
     users = CustomUser.objects.exclude(is_superuser=True)
-    return render(request, 'admindashboard')
+    return render(request, 'admindashboard.html')
 
 
 

@@ -177,15 +177,24 @@
                                                     <td>{{ job.rofr_act }}</td>
                                                     <td>{{ job.approval_status}}</td>
                                                     <td>
-                                                        {% if job.approval_status in 'Pending' or job.approval_status in 'Approved' or job.approval_status in 'Rejected' %}
+                                                        {% if job.approval_status == 'Pending' %}
                                                             <form action="{% url 'admin_approve_reject' job.id 'approve' %}" method="post" class="approval-form">
                                                                 {% csrf_token %}
                                                                 <button type="submit" class="btn btn-success">Approve</button>
                                                             </form>
-                                                    
                                                             <form action="{% url 'admin_approve_reject' job.id 'reject' %}" method="post" class="approval-form">
                                                                 {% csrf_token %}
                                                                 <button type="submit" class="btn btn-danger">Reject</button>
+                                                            </form>
+                                                        {% elif job.approval_status == 'Approved' %}
+                                                            <form action="{% url 'admin_approve_reject' job.id 'reject' %}" method="post" class="approval-form">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                                            </form>
+                                                        {% elif job.approval_status == 'Rejected' %}
+                                                            <form action="{% url 'admin_approve_reject' job.id 'approve' %}" method="post" class="approval-form">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-success">Approve</button>
                                                             </form>
                                                         {% endif %}
                                                     </td>                                                                                                                                                            

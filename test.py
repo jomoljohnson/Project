@@ -1,4 +1,4 @@
-# Test 1: Login test
+# # Test 1: Login test
 
 # from django.test import LiveServerTestCase
 # from selenium import webdriver
@@ -22,7 +22,7 @@
 
 #         assert 'Job Card Application' in driver.page_source
 
-# #TEST 2: Working day selection
+# # #TEST 2: Working day selection
 # from django.test import LiveServerTestCase
 # from selenium import webdriver
 # from selenium.webdriver.common.keys import Keys
@@ -73,12 +73,12 @@
 
 #         date_input = self.driver.find_element(By.ID, 'start_date')
 #         date_input.clear()  
-#         date_input.send_keys('11-04-2024')
+#         date_input.send_keys('13-04-2024')
 #         time.sleep(3)
 
 #         date_input = self.driver.find_element(By.ID, 'end_date')
 #         date_input.clear()  
-#         date_input.send_keys('21-04-2024')
+#         date_input.send_keys('15-04-2024')
 #         time.sleep(3)
 
 #         # Step 6: Click on "Proceed" button
@@ -91,7 +91,7 @@
 
 
 
-#TEST 3: Accept Job
+# #TEST 3: Accept Job
 # from django.test import LiveServerTestCase
 # from selenium import webdriver
 # from selenium.webdriver.common.keys import Keys
@@ -144,7 +144,59 @@
 
 
 
-#Test4: Add mentor
+# #Test4: User Job mentor
+# from django.test import LiveServerTestCase
+# from selenium import webdriver
+# from selenium.webdriver.common.keys import Keys
+# import time
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.ui import Select
+
+# class UserJobTest(LiveServerTestCase):
+
+#     def setUp(self):
+#         self.username = 'panchayath01@gmail.com'
+#         self.password = 'Panchayath@123'
+
+#         self.driver = webdriver.Chrome()
+
+#     def tearDown(self):
+#         self.driver.quit()
+
+#     def login(self):
+#         self.driver.get('http://127.0.0.1:8000/login.html')
+#         time.sleep(3)
+#         username_input = self.driver.find_element(By.NAME, 'email')
+#         password_input = self.driver.find_element(By.NAME, 'password')
+#         login_button = self.driver.find_element(By.NAME, 'submit')
+#         username_input.send_keys(self.username)
+#         password_input.send_keys(self.password)
+#         login_button.send_keys(Keys.RETURN)
+#         time.sleep(3)  
+
+#     def test_doctor_booking(self):
+#         # Step 1: Login
+#         self.login()
+
+#         # Step 2: Navigate to the patient dashboard
+#         self.driver.get('http://127.0.0.1:8000/admindashboard')
+#         time.sleep(3)  
+
+#         # Step 3: Click on "View Doctors" link/button
+#         view_doctors_button = self.driver.find_element(By.LINK_TEXT, 'User Jobs')
+#         view_doctors_button.click()
+#         time.sleep(3)  
+
+
+#         # Step 6: Click on "Proceed" button
+#         proceed_button = self.driver.find_element(By.XPATH, '//button[@type="submit" and text()="Reject"]')
+#         proceed_button.click()
+#         time.sleep(3)
+#         # Step 7: Verify if "Proceed" button is present on the booking page
+#         proceed_button = self.driver.find_element(By.LINK_TEXT, 'User Jobs')
+#         self.assertIsNotNone(proceed_button)
+
+#Test 5:job approval
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -152,11 +204,11 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
-class AddMentorTest(LiveServerTestCase):
+class JobApprovalTest(LiveServerTestCase):
 
     def setUp(self):
-        self.username = 'johnson@gmail.com'
-        self.password = 'Johnson@123'
+        self.username = 'panchayath01@gmail.com'
+        self.password = 'Panchayath@123'
 
         self.driver = webdriver.Chrome()
 
@@ -179,19 +231,19 @@ class AddMentorTest(LiveServerTestCase):
         self.login()
 
         # Step 2: Navigate to the patient dashboard
-        self.driver.get('http://127.0.0.1:8000/dashmember')
+        self.driver.get('http://127.0.0.1:8000/admindashboard')
         time.sleep(3)  
 
         # Step 3: Click on "View Doctors" link/button
-        view_doctors_button = self.driver.find_element(By.LINK_TEXT, 'Add team leader')
+        view_doctors_button = self.driver.find_element(By.LINK_TEXT, 'view User job Card')
         view_doctors_button.click()
         time.sleep(3)  
 
 
         # Step 6: Click on "Proceed" button
-        proceed_button = self.driver.find_element(By.XPATH, '//button[@type="submit" and text()="Add as Mentor"]')
+        proceed_button = self.driver.find_element(By.XPATH, '//button[@type="submit" and text()="Approve"]')
         proceed_button.click()
-        time.sleep(3)
+        time.sleep(5)
         # Step 7: Verify if "Proceed" button is present on the booking page
-        proceed_button = self.driver.find_element(By.LINK_TEXT, 'Add team leader')
+        proceed_button = self.driver.find_element(By.LINK_TEXT, 'view User job Card')
         self.assertIsNotNone(proceed_button)
