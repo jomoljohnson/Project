@@ -1344,3 +1344,5 @@ def view_started_work(request):
     }
 
     return render(request, 'started_work.html', context)
+
+
