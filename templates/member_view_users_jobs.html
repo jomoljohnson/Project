@@ -131,6 +131,7 @@
                                     <table class="table table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th>Sl No</th>
                                                     <th>User Name</th>
                                                     <th>Job Title</th>
                                                     <th>Start Date</th>
@@ -141,16 +142,17 @@
                                             <tbody>
                                                 {% for job in approved_jobs %}
                                                 <tr>
+                                                    <td>{{ forloop.counter }}</td>
                                                     <td>{{ job.user.username }}</td>
                                                     <td>{{ job.job.title }}</td>
                                                     <td>{{ job.start_date }}</td>
                                                     <td>
-                                                        {% for job_title, count in total_workers %}
-                                                            {% if job_title == job.job.title %}
-                                                                {{ count }}
+                                                        {% for count_tuple in total_workers %}
+                                                            {% if count_tuple.0 == job.job.title %}
+                                                                {{ count_tuple.1 }}
                                                             {% endif %}
                                                         {% endfor %}
-                                                    </td>
+                                                    </td>                                                    
                                                     <td>
                                                         <form method="post" action="{% url 'start_work' %}">
                                                             {% csrf_token %}

@@ -80,7 +80,8 @@ urlpatterns = [
     path('view_add_job',views.view_add_job,name="view_add_job"),
     path('edit_job<int:job_id>', views.edit_job, name='edit_job'),
 
-
+    path('accept_job<int:job_id>', views.accept_job, name='accept_job'),
+    path('reject_job<int:job_id>', views.reject_job, name='reject_job'),
 
     path('add_member',views.add_member,name="add_member"),
 

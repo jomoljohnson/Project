@@ -202,14 +202,25 @@
                                 <td>{{ job.start_date }}</td> <!-- Start Date -->
                                 <td>{{ job.end_date }}</td> <!-- End Date -->
                                 <td>
-                                    <form method="post">
+                                    {% comment %} <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="job_id" value="{{ job.id }}">
                                         <input type="hidden" name="worker_id" value="{{ worker.id }}">
                                         <input type="hidden" name="job_title" value="{{ job.job.title }}">
                                         <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
                                         <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
-                                    </form>
+                                    </form> {% endcomment %}
+                                    <td>
+                                            <form action="{% url 'accept_job' job.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success">Accept</button>
+                                            </form>
+                                            <form action="{% url 'reject_job' job.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                            </form>
+                                    </td>
+                                    
                                 </td>
                             </tr>
                         {% empty %}

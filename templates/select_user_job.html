@@ -315,41 +315,60 @@
         // Function to validate selected dates
         function validateDates() {
             console.log('Inside validateDates function');  // Debugging statement
-
+    
             var startDateInput = document.getElementById('start_date');
             var endDateInput = document.getElementById('end_date');
-
+    
             // Parse selected dates to Date objects
             var startDate = new Date(startDateInput.value);
             var endDate = new Date(endDateInput.value);
-
+    
             // Get the current date
             var currentDate = new Date();
-
+    
             // Check if start date is before the current date
             if (startDate < currentDate) {
                 alert('Please select a future start date.');
                 return false;
             }
-
+    
             // Check if end date is before start date
             if (endDate < startDate) {
                 alert('End date must be greater than the start date.');
                 return false;
             }
-
+    
             return true;
         }
-
+    
         // Event listener for form submission
         document.getElementById('select_job_form').addEventListener('submit', function (event) {
             console.log('Inside form submission event listener');  // Debugging statement
-
+    
+            // Call validateDates function and prevent form submission if validation fails
             if (!validateDates()) {
                 event.preventDefault(); // Prevent form submission if validation fails
             }
         });
+    
+        // Function to set minimum date for start date selection and display a note for the user
+        function setMinStartDate() {
+            var startDateInput = document.getElementById('start_date');
+            var currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + 10); // Add 10 days to the current date
+            var formattedDate = currentDate.toISOString().split('T')[0]; // Format date as 'YYYY-MM-DD'
+            startDateInput.min = formattedDate;
+    
+            // Display a note for the user
+            var noteElement = document.createElement('p');
+            noteElement.textContent = 'You can select the starting date from ' + formattedDate + ' onwards.';
+            document.getElementById('start_date').parentNode.appendChild(noteElement);
+        }
+    
+        // Call the function to set the minimum start date when the document is loaded
+        setMinStartDate();
     });
+    
 </script>
 <body>
     <!-- Header -->
